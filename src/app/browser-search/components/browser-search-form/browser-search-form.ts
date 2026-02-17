@@ -2,14 +2,14 @@ import { Component, EventEmitter, Output, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-todo-search-form',
+  selector: 'app-browser-search-form',
   imports: [
     FormsModule,
   ],
-  templateUrl: './todo-search-form.html',
-  styleUrl: './todo-search-form.scss',
+  templateUrl: './browser-search-form.html',
+  styleUrl: './browser-search-form.scss',
 })
-export class TodoSearchForm {
+export class BrowserSearchForm {
   @Output() submitEvent = new EventEmitter();
 
   protected query: string = '';

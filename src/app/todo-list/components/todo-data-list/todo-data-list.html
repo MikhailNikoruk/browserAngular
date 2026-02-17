@@ -1,9 +1,0 @@
-<ul class="todo-list">
-    @for (dataItem of dataList; track dataItem.id) {
-        <li class="todo-item">
-            {{ dataItem.text }}
-
-            <button (click)="removeItem(dataItem.id)">x</button>
-        </li>
-    }
-</ul>

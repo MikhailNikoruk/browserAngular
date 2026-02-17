@@ -1,0 +1,13 @@
+<app-browser-search-form
+    class="search-form"
+    (submitEvent)="handleNewSearch($event)"
+></app-browser-search-form>
+
+@if (searchResults.length) {
+    <app-browser-search-data
+        class="data-list"
+        [dataList]="searchResults"
+    ></app-browser-search-data>
+} @else {
+    <div class="error-block">Cписок пуст</div>
+}
