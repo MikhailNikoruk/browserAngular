@@ -10,6 +10,19 @@
     flex-direction: column;
 }
 
+.data-item__header {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+}
+
+.data-item__position {
+    border: 1px solid black;
+    border-radius: 1rem;
+    padding: 0.5rem;
+}
+
 .data-item__title {
     font-size: 1.5rem;
 }

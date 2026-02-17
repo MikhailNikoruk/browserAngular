@@ -1,15 +1,19 @@
 <div class="data-list">
-    @for (dataItem of dataList; track dataItem.id) {
+    @for (dataItem of dataList; track dataItem.id;) {
         <div class="data-item">
             <div class="data-item__header">
+                <div class="data-item__position">
+                    {{ $index + 1 }}
+                </div>
+
                 <span class="data-item__title">
                     {{ dataItem.title }}
                 </span>
-
-                <a [href]="dataItem.link">
-                    {{ dataItem.link }}
-                </a>
             </div>
+
+            <a [href]="dataItem.link">
+                {{ dataItem.link }}
+            </a>
 
             <div class="data-item__text">
                 {{ dataItem.text }}

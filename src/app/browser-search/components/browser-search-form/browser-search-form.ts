@@ -1,37 +1,47 @@
 import { Component, EventEmitter, Output, output } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+interface SearchFormControls {
+  query: FormControl<string>;
+}
+
 @Component({
   selector: 'app-browser-search-form',
   imports: [
-    FormsModule,
     ReactiveFormsModule
   ],
   templateUrl: './browser-search-form.html',
   styleUrl: './browser-search-form.scss',
 })
 export class BrowserSearchForm {
-  @Output() submitEvent = new EventEmitter();
-  @Output() resetEvent = new EventEmitter();
+  @Output() submitEvent = new EventEmitter<string>();
+  @Output() resetEvent = new EventEmitter<void>();
 
-  protected searchForm = new FormGroup({
-    query: new FormControl(''),
+  protected searchForm = new FormGroup<SearchFormControls>({
+    query: new FormControl('', { nonNullable: true }),
   });
 
+  protected get queryControl(): FormControl<string> {
+    return this.searchForm.controls.query;
+  }
+
   protected get queryValue(): string {
-    return this.searchForm.controls.query.value || '';
+    return this.queryControl.value;
   }
 
   protected submitForm(): void {
-    const submitQuery = this.searchForm.value.query
-    console.log('>>> [search-form] submitQuery =>', submitQuery);
+    const rawQuery: string = this.queryValue;
+    const validatedQuery: string = rawQuery.trim();
 
-    this.submitEvent.emit(submitQuery);
+    if (validatedQuery !== rawQuery) {
+      this.queryControl.setValue(validatedQuery);
+    }
+
+    this.submitEvent.emit(validatedQuery);
   }
 
   protected resetForm(): void {
     this.searchForm.reset();
-
     this.resetEvent.emit();
   }
 }
