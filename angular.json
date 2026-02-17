@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "frontend-angular-project-first-step": {
+    "lesson-15-forms": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -61,10 +61,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "frontend-angular-project-first-step:build:production"
+              "buildTarget": "lesson-15-forms:build:production"
             },
             "development": {
-              "buildTarget": "frontend-angular-project-first-step:build:development"
+              "buildTarget": "lesson-15-forms:build:development"
             }
           },
           "defaultConfiguration": "development"
