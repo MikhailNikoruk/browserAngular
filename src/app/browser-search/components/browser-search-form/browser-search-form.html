@@ -6,8 +6,17 @@
         placeholder="Введите запрос"
     >
 
+    @if (query) {
+        <button
+            class="form-button"
+            (click)="reset()"
+        >
+            X
+        </button>
+    }
+
     <button
-        class="search-button"
+        class="form-button"
         (click)="submit()"
     >
         Найти

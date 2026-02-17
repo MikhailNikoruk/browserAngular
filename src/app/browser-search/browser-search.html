@@ -1,6 +1,7 @@
 <app-browser-search-form
     class="search-form"
     (submitEvent)="handleNewSearch($event)"
+    (resetEvent)="handleResetSearch()"
 ></app-browser-search-form>
 
 @if (searchResults.length) {

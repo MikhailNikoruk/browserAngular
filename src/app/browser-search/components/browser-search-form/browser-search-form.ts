@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class BrowserSearchForm {
   @Output() submitEvent = new EventEmitter();
+  @Output() resetEvent = new EventEmitter();
 
   protected query: string = '';
 
@@ -18,7 +19,13 @@ export class BrowserSearchForm {
     const submitQuery = this.query;
     console.log('>>> [search-form] submitQuery =>', submitQuery);
 
-    this.query = '';
     this.submitEvent.emit(submitQuery);
+  }
+
+  protected reset(): void {
+    console.log('>>> reset');
+
+    this.query = '';
+    this.resetEvent.emit();
   }
 }
