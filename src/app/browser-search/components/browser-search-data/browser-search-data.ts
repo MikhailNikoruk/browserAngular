@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { SearchDataItem } from '../../types';
 
 @Component({
@@ -9,6 +9,4 @@ import { SearchDataItem } from '../../types';
 })
 export class BrowserSearchData {
   @Input() dataList: SearchDataItem[] = [];
-
-  @Output() removeEvent = new EventEmitter();
 }

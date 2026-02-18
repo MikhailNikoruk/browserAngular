@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "lesson-15-forms": {
+    "lesson-18-data-states": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -61,10 +61,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "lesson-15-forms:build:production"
+              "buildTarget": "lesson-18-data-states:build:production"
             },
             "development": {
-              "buildTarget": "lesson-15-forms:build:development"
+              "buildTarget": "lesson-18-data-states:build:development"
             }
           },
           "defaultConfiguration": "development"

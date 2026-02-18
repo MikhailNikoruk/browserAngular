@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Output, output } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 interface SearchFormControls {
   query: FormControl<string>;
