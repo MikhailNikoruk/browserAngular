@@ -1,37 +1,50 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { BrowserSearchForm, BrowserSearchData } from './components';
 import { SearchDataItem } from './types';
-import { SEARCH_DATA_LIST } from './consts';
+import { BrowserDataService } from './services';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
-  selector: 'app-browser-search',
-  templateUrl: './browser-search.html',
-  styleUrl: './browser-search.scss',
-  imports: [
-    BrowserSearchForm,
-    BrowserSearchData
-  ],
+    selector: 'app-browser-search',
+    templateUrl: './browser-search.html',
+    styleUrl: './browser-search.scss',
+    imports: [BrowserSearchForm, BrowserSearchData],
+    providers: [BrowserDataService]
 })
 export class BrowserSearch {
-  protected searchResults: SearchDataItem[] = SEARCH_DATA_LIST;
+    private readonly dataService = inject(BrowserDataService);
 
-  protected handleNewSearch(query: string) {
-    console.log('query =>', query);
+    protected searchResults: SearchDataItem[] = [];
 
-    const validateQuery: string = query.toLowerCase();
+    protected historyList: string[] = [];
 
-    this.searchResults = SEARCH_DATA_LIST.filter((item: SearchDataItem) => {
-      const validatedItemTitle = item.title.toLowerCase()
-      const isQueryInTitle = validatedItemTitle.includes(validateQuery);
+    constructor() {
+        this.watchDataFlow();
+    }
 
-      const validatedItemText = item.text.toLowerCase()
-      const isQueryInText = validatedItemText.includes(validateQuery);
-      
-      return isQueryInTitle || isQueryInText;
-    });
-  }
+    protected handleNewSearch(query: string) {
+        this.dataService.findData(query);
+    }
 
-  protected handleResetSearch() {
-    this.searchResults = SEARCH_DATA_LIST;
-  }
+    protected handleResetSearch() {
+        this.dataService.resetData()
+    }
+
+    protected applyLastQuery(query: string) {
+        this.dataService.findData(query);
+    }
+
+    private watchDataFlow(): void {
+        this.dataService.dataList$
+            .pipe(takeUntilDestroyed())
+            .subscribe((data: SearchDataItem[]) => {
+                this.searchResults = data;
+            });
+
+        this.dataService.historyList$
+            .pipe(takeUntilDestroyed())
+            .subscribe((data: string[]) => {
+                this.historyList = data;
+            });
+    }
 }

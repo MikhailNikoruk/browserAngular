@@ -180,5 +180,11 @@ export const SEARCH_DATA_LIST: SearchDataItem[] = [
         title: 'Дизайн-система на минималках: кнопки, поля, токены',
         text: 'Как начать с маленького UI-kit и не утонуть: базовые компоненты и правила использования.',
         link: 'https://example.com/frontend/design-system-basics'
+    },
+    {
+        id: 'news-031',
+        title: 'test',
+        text: 'test test test',
+        link: 'https://test.com'
     }
 ];

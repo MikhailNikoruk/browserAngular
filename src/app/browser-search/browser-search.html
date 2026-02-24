@@ -4,11 +4,25 @@
     (resetEvent)="handleResetSearch()"
 ></app-browser-search-form>
 
+<div class="query-history">
+    <p>
+        Прошлые запросы
+    </p>
+
+    <ul>
+        @for (historyItem of historyList; track historyItem) {
+            <li class="query-value" (click)="applyLastQuery(historyItem)">
+                {{ historyItem }}
+            </li>
+        }
+    </ul>
+</div>
+
 @if (searchResults.length) {
     <app-browser-search-data
         class="data-list"
         [dataList]="searchResults"
     ></app-browser-search-data>
 } @else {
-    <div class="error-block">Cписок пуст</div>
+    <div class="error-block">ничего не нашли</div>
 }

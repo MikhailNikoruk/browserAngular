@@ -8,6 +8,17 @@
     justify-content: center;
 }
 
+.query-history {
+    margin-top: 2rem;
+    font-size: 1rem;
+    color: gray;
+}
+
+.query-value {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
 .data-list {
     margin-top: 2rem;
 }
