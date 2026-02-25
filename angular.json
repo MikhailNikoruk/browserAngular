@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "lesson-18-data-states": {
+    "lesson-19-api-services": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -61,10 +61,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "lesson-18-data-states:build:production"
+              "buildTarget": "lesson-19-api-services:build:production"
             },
             "development": {
-              "buildTarget": "lesson-18-data-states:build:development"
+              "buildTarget": "lesson-19-api-services:build:development"
             }
           },
           "defaultConfiguration": "development"

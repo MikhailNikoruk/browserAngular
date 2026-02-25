@@ -1,3 +1,16 @@
+@let searchResults = (searchResults$ | async) || [];
+@let historyList = (historyList$ | async) || [];
+
+<p>
+    Режим поиска: {{currentSearchMode === SearchMode.Global ? 'Глобальный' : 'Локальный'}}
+</p>
+
+<button (click)="selectSearchMode(SearchMode.Global)">Глобальный</button>
+<button (click)="selectSearchMode(SearchMode.Local)">Локальный</button>
+
+<br/>
+<br/>
+
 <app-browser-search-form
     class="search-form"
     (submitEvent)="handleNewSearch($event)"

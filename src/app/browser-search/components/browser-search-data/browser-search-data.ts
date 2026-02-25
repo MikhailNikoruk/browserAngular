@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, Input } from '@angular/core';
 import { SearchDataItem } from '../../types';
 
 @Component({
@@ -8,5 +8,6 @@ import { SearchDataItem } from '../../types';
   styleUrl: './browser-search-data.scss',
 })
 export class BrowserSearchData {
-  @Input() dataList: SearchDataItem[] = [];
+  // @Input() dataList: SearchDataItem[] = [];
+  dataList = input<SearchDataItem[]>([]);
 }
