@@ -1,12 +1,18 @@
 @let searchResults = (searchResults$ | async) || [];
 @let historyList = (historyList$ | async) || [];
+@let state = state$ | async;
 
 <p>
     Режим поиска: {{currentSearchMode === SearchMode.Global ? 'Глобальный' : 'Локальный'}}
+    <button (click)="selectSearchMode(SearchMode.Global)">Глобальный</button>
+    <button (click)="selectSearchMode(SearchMode.Local)">Локальный</button>
 </p>
 
-<button (click)="selectSearchMode(SearchMode.Global)">Глобальный</button>
-<button (click)="selectSearchMode(SearchMode.Local)">Локальный</button>
+<p>
+    Текущая тема: {{state?.theme === 'light' ? 'Светлая' : 'Темная'}}
+    <button (click)="selectTheme('light')">Светлая</button>
+    <button (click)="selectTheme('dark')">Темная</button>
+</p>
 
 <br/>
 <br/>

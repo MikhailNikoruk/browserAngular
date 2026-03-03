@@ -5,7 +5,8 @@ import { BrowserDataService } from './services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { SearchMode } from './enums';
-import { AsyncPipe, CommonModule } from '@angular/common';
+import { AsyncPipe, CommonModule, JsonPipe } from '@angular/common';
+import { AppDataStoreService } from '../core';
 
 @Component({
     selector: 'app-browser-search',
@@ -16,12 +17,15 @@ import { AsyncPipe, CommonModule } from '@angular/common';
 })
 export class BrowserSearch {
     private readonly dataService = inject(BrowserDataService);
+    private readonly appStore = inject(AppDataStoreService)
 
     protected searchResults$: Observable<SearchDataItem[]> = this.dataService.dataList$;
     protected historyList$: Observable<string[]> = this.dataService.historyList$;
 
     protected SearchMode = SearchMode;
     protected currentSearchMode: SearchMode = SearchMode.Local;
+
+    protected state$ = this.appStore.state$;
 
     // constructor() {
     //     this.watchDataFlow();
@@ -50,6 +54,12 @@ export class BrowserSearch {
 
     protected selectSearchMode(mode: SearchMode): void {
         this.currentSearchMode = mode;
+    }
+
+    protected selectTheme(newTheme: 'light' | 'dark') {
+        this.appStore.updateStateData({
+            theme: newTheme
+        });
     }
 
     // private watchDataFlow(): void {
