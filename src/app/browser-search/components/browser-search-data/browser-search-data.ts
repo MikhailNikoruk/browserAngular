@@ -9,4 +9,14 @@ import { SearchDataItem } from '../../types';
 })
 export class BrowserSearchData {
   dataList = input<SearchDataItem[]>([]);
+
+  protected getLinkLabel(link: string): string {
+    try {
+      const parsedUrl = new URL(link);
+
+      return parsedUrl.hostname.replace('www.', '');
+    } catch {
+      return link;
+    }
+  }
 }

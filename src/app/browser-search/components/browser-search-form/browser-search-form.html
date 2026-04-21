@@ -10,6 +10,10 @@
             inputmode="search"
             autocomplete="off"
         >
+
+        <span class="search-form__hint">
+            Пробуйте точный термин, фамилию автора или тематический фрагмент.
+        </span>
     </label>
 
     <label class="search-form__field search-form__field--compact">
@@ -33,12 +37,12 @@
     <div class="search-form__actions">
         @if (queryValue || categoryValue !== 'all') {
             <button class="form-button form-button--secondary" type="button" [disabled]="isLoading" (click)="resetForm()">
-                Сбросить
+                Очистить
             </button>
         }
 
         <button class="form-button" type="submit" [disabled]="!canSubmit || isLoading">
-            {{ isLoading ? 'Ищу...' : 'Найти' }}
+            {{ isLoading ? 'Собираю подборку...' : 'Найти материалы' }}
         </button>
     </div>
 </form>

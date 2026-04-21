@@ -1,5 +1,190 @@
-/* You can add global styles to this file, and also import other style files */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
-* {
-    font-size: 1rem;
+html {
+  font-size: 16px;
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #08111f;
+  color: #0f172a;
+  font-family:
+    'IBM Plex Sans',
+    'Segoe UI',
+    sans-serif;
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: rgba(15, 111, 255, 0.18);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  letter-spacing: inherit;
+}
+
+app-browser-search .meta-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.25rem;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--panel-border);
+  border-radius: 999px;
+  background: var(--card-bg);
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1;
+  backdrop-filter: blur(10px);
+}
+
+app-browser-search .meta-chip--strong {
+  border-color: var(--panel-border-strong);
+  background: var(--accent-soft);
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+app-browser-search .pill-button,
+app-browser-search .history-button {
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 140ms ease,
+    background-color 140ms ease,
+    color 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+app-browser-search .pill-button {
+  min-height: 2.75rem;
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--panel-border);
+  background: var(--button-subtle);
+  color: var(--text-primary);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+app-browser-search .pill-button:hover,
+app-browser-search .history-button:hover {
+  transform: translateY(-1px);
+  border-color: var(--button-border);
+  background: var(--button-subtle);
+}
+
+app-browser-search .pill-button:hover {
+  background: var(--accent-soft);
+}
+
+app-browser-search .pill-button--active {
+  background: var(--button-bg);
+  color: var(--button-text);
+  border-color: var(--button-border);
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.16);
+}
+
+app-browser-search .history-button {
+  padding: 0.72rem 1rem;
+  border: 1px solid var(--panel-border);
+  background: var(--card-bg);
+  color: var(--text-primary);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+app-browser-search .history-button:hover {
+  box-shadow: 0 12px 22px rgba(15, 23, 42, 0.08);
+}
+
+app-browser-search .pill-button:focus-visible,
+app-browser-search .history-button:focus-visible {
+  outline: none;
+  border-color: var(--button-border);
+  box-shadow: var(--focus-ring);
+}
+
+app-browser-search .status-block {
+  margin: 2rem auto 0;
+  padding: 1.6rem 1.75rem;
+  border: 1px solid var(--panel-border);
+  border-radius: 1.8rem;
+  text-align: left;
+  color: var(--text-secondary);
+  background: var(--status-bg);
+  box-shadow: var(--surface-shadow);
+}
+
+app-browser-search .status-block h3 {
+  margin: 0.25rem 0 0.6rem;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 2.2vw, 2.15rem);
+  font-weight: 700;
+  line-height: 1.06;
+}
+
+app-browser-search .status-block p {
+  margin: 0;
+  max-width: 40rem;
+  line-height: 1.7;
+}
+
+app-browser-search .status-block__eyebrow {
+  margin: 0;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+app-browser-search .status-block--loading {
+  position: relative;
+}
+
+app-browser-search .status-block--loading::before {
+  content: '';
+  display: inline-block;
+  width: 0.85rem;
+  height: 0.85rem;
+  margin-right: 0.65rem;
+  border: 2px solid var(--panel-border);
+  border-top-color: var(--button-bg);
+  border-radius: 50%;
+  vertical-align: 0.05rem;
+  animation: browser-search-status-spin 800ms linear infinite;
+}
+
+app-browser-search .status-block--error {
+  border-color: var(--accent);
+  box-shadow:
+    var(--surface-shadow),
+    0 0 0 1px var(--accent-soft) inset;
+}
+
+app-browser-search .status-block--idle {
+  opacity: 0.92;
+}
+
+@keyframes browser-search-status-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }

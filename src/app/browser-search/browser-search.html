@@ -7,27 +7,44 @@
 
 <div class="browser-search" [class.theme-light]="theme !== 'dark'" [class.theme-dark]="theme === 'dark'">
     <div class="browser-search__shell">
-        <header class="browser-search__header">
-            <div>
-                <p class="browser-search__eyebrow">Lesson 18-19 Practice</p>
-                <h2 class="browser-search__title">Браузерный поиск</h2>
+        <header class="browser-search__hero">
+            <div class="browser-search__intro">
+                <p class="browser-search__eyebrow">Editorial Search Desk</p>
+                <h2 class="browser-search__title">Браузерный поиск для учебных материалов и книг</h2>
                 <p class="browser-search__subtitle">
-                    Поиск по локальным карточкам и Google Books с историей запросов, темой и сохранением состояния.
+                    Один экран для локальной библиотеки и Google Books: история запросов, сохранённая тема
+                    и более читаемая подача результатов.
                 </p>
+
+                <div class="browser-search__hero-meta">
+                    <span class="meta-chip">
+                        {{ currentSearchMode === SearchMode.Local ? 'Local index' : 'Google Books live' }}
+                    </span>
+                    <span class="meta-chip">
+                        {{ theme === 'dark' ? 'Dark room' : 'Paper light' }}
+                    </span>
+                    <span class="meta-chip">
+                        {{
+                            params.category === 'all'
+                                ? 'All topics'
+                                : searchCategoryLabels[params.category]
+                        }}
+                    </span>
+                </div>
             </div>
 
-            <div class="browser-search__controls">
+            <div class="browser-search__control-rail">
                 <div class="control-group">
-                    <span class="control-group__label">Режим поиска</span>
+                    <span class="control-group__label">Search mode</span>
 
-                    <div class="pill-group">
+                    <div class="segmented-control">
                         <button
                             class="pill-button"
                             type="button"
                             [class.pill-button--active]="currentSearchMode === SearchMode.Local"
                             (click)="selectSearchMode(SearchMode.Local)"
                         >
-                            Локальный
+                            Local
                         </button>
 
                         <button
@@ -36,22 +53,22 @@
                             [class.pill-button--active]="currentSearchMode === SearchMode.Global"
                             (click)="selectSearchMode(SearchMode.Global)"
                         >
-                            Глобальный
+                            Global
                         </button>
                     </div>
                 </div>
 
                 <div class="control-group">
-                    <span class="control-group__label">Тема</span>
+                    <span class="control-group__label">Mood</span>
 
-                    <div class="pill-group">
+                    <div class="segmented-control">
                         <button
                             class="pill-button"
                             type="button"
                             [class.pill-button--active]="theme !== 'dark'"
                             (click)="selectTheme('light')"
                         >
-                            Светлая
+                            Light
                         </button>
 
                         <button
@@ -60,14 +77,28 @@
                             [class.pill-button--active]="theme === 'dark'"
                             (click)="selectTheme('dark')"
                         >
-                            Темная
+                            Dark
                         </button>
                     </div>
                 </div>
             </div>
         </header>
 
-        <section class="browser-search__panel">
+        <section class="browser-search__panel browser-search__panel--search">
+            <div class="browser-search__panel-header">
+                <div>
+                    <p class="browser-search__panel-kicker">Search desk</p>
+                    <h3>Соберите запрос и переключайтесь между локальной базой и внешним каталогом.</h3>
+                </div>
+                <p class="browser-search__panel-caption">
+                    {{
+                        currentSearchMode === SearchMode.Global
+                            ? 'В глобальном режиме категория сохраняется как локальный контекст.'
+                            : 'Локальный режим поддерживает поиск по категории даже без текстового запроса.'
+                    }}
+                </p>
+            </div>
+
             <app-browser-search-form
                 [params]="params"
                 [categories]="searchCategories"
@@ -77,17 +108,14 @@
                 (submitEvent)="handleNewSearch($event)"
                 (resetEvent)="handleResetSearch()"
             ></app-browser-search-form>
-
-            @if (currentSearchMode === SearchMode.Global) {
-                <p class="browser-search__hint browser-search__hint--top">
-                    В глобальном режиме категория не влияет на результаты и сохраняется для локального поиска.
-                </p>
-            }
         </section>
 
         <section class="browser-search__history">
             <div class="browser-search__section-header">
-                <h3>История запросов</h3>
+                <div>
+                    <p class="browser-search__panel-kicker">History shelf</p>
+                    <h3>Недавние запросы</h3>
+                </div>
 
                 @if (historyList.length) {
                     <button class="pill-button" type="button" (click)="clearHistory()">
@@ -107,35 +135,79 @@
                     }
                 </ul>
             } @else {
-                <p class="browser-search__hint">История появится после первого успешного поиска.</p>
+                <p class="browser-search__hint">История появится после первого успешного поиска и останется между сессиями.</p>
             }
         </section>
 
         @if (requestStatus === 'success') {
-            <app-browser-search-data [dataList]="searchResults"></app-browser-search-data>
+            <section class="browser-search__results">
+                <div class="browser-search__section-header browser-search__section-header--results">
+                    <div>
+                        <p class="browser-search__panel-kicker">Result set</p>
+                        <h3>
+                            {{
+                                currentSearchMode === SearchMode.Global
+                                    ? 'Внешние источники'
+                                    : 'Локальные материалы'
+                            }}
+                        </h3>
+                    </div>
+
+                    <div class="browser-search__results-meta">
+                        <span class="meta-chip meta-chip--strong">{{ searchResults.length }} items</span>
+                        <span class="meta-chip">
+                            {{
+                                currentSearchMode === SearchMode.Global
+                                    ? 'Source: Google Books'
+                                    : 'Source: Local collection'
+                            }}
+                        </span>
+                    </div>
+                </div>
+
+                <app-browser-search-data [dataList]="searchResults"></app-browser-search-data>
+            </section>
         } @else if (requestStatus === 'loading') {
             <div class="status-block status-block--loading">
-                Ищу результаты{{ currentSearchMode === SearchMode.Global ? ' в Google Books' : '' }}...
+                <p class="status-block__eyebrow">Searching</p>
+                <h3>Подбираю материалы{{ currentSearchMode === SearchMode.Global ? ' в Google Books' : '' }}</h3>
+                <p>Готовлю новую подборку результатов и очищаю устаревшие ответы.</p>
             </div>
         } @else if (requestStatus === 'error') {
             <div class="status-block status-block--error">
-                {{ errorMessage || 'Во время поиска произошла ошибка.' }}
+                <p class="status-block__eyebrow">Connection issue</p>
+                <h3>Не получилось получить внешние результаты</h3>
+                <p>{{ errorMessage || 'Во время поиска произошла ошибка.' }}</p>
             </div>
         } @else if (requestStatus === 'empty') {
             <div class="status-block">
-                {{
-                    currentSearchMode === SearchMode.Global
-                        ? 'По этому запросу в Google Books ничего не найдено.'
-                        : 'Ничего не найдено. Попробуйте другой запрос или категорию.'
-                }}
+                <p class="status-block__eyebrow">No matches</p>
+                <h3>Подборка пока пустая</h3>
+                <p>
+                    {{
+                        currentSearchMode === SearchMode.Global
+                            ? 'По этому запросу в Google Books ничего не найдено.'
+                            : 'Ничего не найдено. Попробуйте другой запрос или категорию.'
+                    }}
+                </p>
             </div>
         } @else {
             <div class="status-block status-block--idle">
-                {{
-                    currentSearchMode === SearchMode.Global
-                        ? 'Введите запрос, чтобы выполнить поиск по Google Books.'
-                        : 'Введите запрос или выберите категорию, чтобы отфильтровать локальные материалы.'
-                }}
+                <p class="status-block__eyebrow">Ready</p>
+                <h3>
+                    {{
+                        currentSearchMode === SearchMode.Global
+                            ? 'Введите запрос, чтобы обратиться к каталогу Google Books.'
+                            : 'Начните с текста запроса или выберите тематическую категорию.'
+                    }}
+                </h3>
+                <p>
+                    {{
+                        currentSearchMode === SearchMode.Global
+                            ? 'Глобальный режим лучше подходит для поиска книг и внешних источников.'
+                            : 'Локальная коллекция хорошо работает как по полному запросу, так и по тематическому фильтру.'
+                    }}
+                </p>
             </div>
         }
     </div>
