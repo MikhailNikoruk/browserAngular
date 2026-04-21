@@ -9,9 +9,7 @@ const HISTORY_LIMIT = 10;
 @Injectable()
 export class SearchHistoryService {
   private readonly storage = inject(LocalStorageService);
-  private readonly historySubject = new BehaviorSubject<string[]>(
-    this.storage.getItem<string[]>(HISTORY_STORAGE_KEY, []),
-  );
+  private readonly historySubject = new BehaviorSubject<string[]>(this.getInitialHistory());
 
   public readonly history$: Observable<string[]> = this.historySubject.asObservable();
 
@@ -28,8 +26,10 @@ export class SearchHistoryService {
 
     const nextHistory = [
       normalizedQuery,
-      ...this.getHistory().filter((historyItem) => historyItem !== normalizedQuery),
-    ].slice(0, HISTORY_LIMIT);
+      ...this.getHistory().filter(
+        (historyItem) => this.getHistoryKey(historyItem) !== this.getHistoryKey(normalizedQuery),
+      ),
+    ];
 
     this.setHistory(nextHistory);
   }
@@ -39,8 +39,61 @@ export class SearchHistoryService {
     this.storage.removeItem(HISTORY_STORAGE_KEY);
   }
 
+  private getInitialHistory(): string[] {
+    const storedHistory = this.storage.getItem<unknown>(HISTORY_STORAGE_KEY, []);
+    const history = this.normalizeHistory(storedHistory);
+
+    if (history.length) {
+      this.storage.setItem(HISTORY_STORAGE_KEY, history);
+    } else {
+      this.storage.removeItem(HISTORY_STORAGE_KEY);
+    }
+
+    return history;
+  }
+
   private setHistory(history: string[]): void {
-    this.historySubject.next(history);
-    this.storage.setItem(HISTORY_STORAGE_KEY, history);
+    const normalizedHistory = this.normalizeHistory(history);
+
+    this.historySubject.next(normalizedHistory);
+
+    if (normalizedHistory.length) {
+      this.storage.setItem(HISTORY_STORAGE_KEY, normalizedHistory);
+      return;
+    }
+
+    this.storage.removeItem(HISTORY_STORAGE_KEY);
+  }
+
+  private normalizeHistory(value: unknown): string[] {
+    if (!Array.isArray(value)) {
+      return [];
+    }
+
+    const uniqueHistory = new Map<string, string>();
+
+    for (const item of value) {
+      if (typeof item !== 'string') {
+        continue;
+      }
+
+      const normalizedItem = item.trim();
+
+      if (!normalizedItem) {
+        continue;
+      }
+
+      const historyKey = this.getHistoryKey(normalizedItem);
+
+      if (!uniqueHistory.has(historyKey)) {
+        uniqueHistory.set(historyKey, normalizedItem);
+      }
+    }
+
+    return Array.from(uniqueHistory.values()).slice(0, HISTORY_LIMIT);
+  }
+
+  private getHistoryKey(query: string): string {
+    return query.trim().toLowerCase();
   }
 }
