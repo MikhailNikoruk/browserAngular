@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -9,12 +9,15 @@ import { GoogleBooksResponseDto } from '../dtos';
 })
 export class GoogleSearchApiService {
   private readonly baseUrl = 'https://www.googleapis.com';
+  private readonly searchPath = '/books/v1/volumes';
 
   private readonly http = inject(HttpClient);
 
   public searchDataByText(text: string): Observable<GoogleBooksResponseDto> {
-    const requestUrl = `${this.baseUrl}/books/v1/volumes?q=${text}`;
+    const params = new HttpParams().set('q', text);
 
-    return this.http.get<GoogleBooksResponseDto>(requestUrl);
+    return this.http.get<GoogleBooksResponseDto>(`${this.baseUrl}${this.searchPath}`, {
+      params,
+    });
   }
 }

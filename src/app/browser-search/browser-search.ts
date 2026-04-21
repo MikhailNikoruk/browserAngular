@@ -39,7 +39,6 @@ export class BrowserSearch {
 
   protected readonly SearchMode = SearchMode;
   protected currentSearchMode: SearchMode = SearchMode.Local;
-  protected hasSearched = false;
 
   protected handleNewSearch(params: SearchParams): void {
     const normalizedParams = this.normalizeParams(params);
@@ -109,7 +108,6 @@ export class BrowserSearch {
       return;
     }
 
-    this.hasSearched = true;
     this.executeSearch(params);
 
     if (saveToHistory && params.query) {
@@ -118,7 +116,6 @@ export class BrowserSearch {
   }
 
   private clearSearchState(): void {
-    this.hasSearched = false;
     this.dataService.resetData();
   }
 

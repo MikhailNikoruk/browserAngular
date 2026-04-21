@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of, Subject, switchMap, tap } from 'rxjs';
 
 import { SearchDataItem, SearchParams, SearchRequestStatus } from '../types';
 import { SEARCH_DATA_LIST } from '../consts';
@@ -12,11 +12,43 @@ export class BrowserDataService {
   private readonly dataListSubject = new BehaviorSubject<SearchDataItem[]>([]);
   private readonly requestStatusSubject = new BehaviorSubject<SearchRequestStatus>('idle');
   private readonly errorMessageSubject = new BehaviorSubject<string | null>(null);
+  private readonly globalSearchQuerySubject = new Subject<string>();
 
   public readonly dataList$: Observable<SearchDataItem[]> = this.dataListSubject.asObservable();
   public readonly requestStatus$: Observable<SearchRequestStatus> =
     this.requestStatusSubject.asObservable();
   public readonly errorMessage$: Observable<string | null> = this.errorMessageSubject.asObservable();
+
+  public constructor() {
+    this.globalSearchQuerySubject
+      .pipe(
+        tap(() => {
+          this.errorMessageSubject.next(null);
+          this.requestStatusSubject.next('loading');
+        }),
+        switchMap((query) =>
+          this.googleApi.searchDataByText(query).pipe(
+            map((response) => ({
+              results: (response.items ?? []).map((item: GoogleBookItemDto) => this.mapGoogleBook(item)),
+              errorMessage: null,
+              status: 'success' as const,
+            })),
+            catchError(() =>
+              of({
+                results: [] as SearchDataItem[],
+                errorMessage: 'Не удалось загрузить результаты из Google Books.',
+                status: 'error' as const,
+              }),
+            ),
+          ),
+        ),
+      )
+      .subscribe(({ errorMessage, results, status }) => {
+        this.dataListSubject.next(results);
+        this.errorMessageSubject.next(errorMessage);
+        this.requestStatusSubject.next(results.length || status === 'error' ? status : 'empty');
+      });
+  }
 
   public findLocalData(params: SearchParams): void {
     const normalizedQuery = this.normalizeQuery(params.query);
@@ -43,26 +75,7 @@ export class BrowserDataService {
       return;
     }
 
-    this.errorMessageSubject.next(null);
-    this.requestStatusSubject.next('loading');
-
-    this.googleApi
-      .searchDataByText(normalizedQuery)
-      .subscribe({
-        next: (response) => {
-          const results = (response.items ?? []).map((item: GoogleBookItemDto) =>
-            this.mapGoogleBook(item),
-          );
-
-          this.dataListSubject.next(results);
-          this.requestStatusSubject.next(results.length ? 'success' : 'empty');
-        },
-        error: () => {
-          this.dataListSubject.next([]);
-          this.errorMessageSubject.next('Не удалось загрузить результаты из Google Books.');
-          this.requestStatusSubject.next('error');
-        },
-      });
+    this.globalSearchQuerySubject.next(normalizedQuery);
   }
 
   public resetData(): void {

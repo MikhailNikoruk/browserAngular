@@ -48,6 +48,14 @@ a:hover {
   text-decoration: underline;
 }
 
+.data-item__link {
+  word-break: break-all;
+}
+
+.data-item__link--muted {
+  color: var(--muted-text);
+}
+
 .data-item__category {
   align-self: flex-start;
   padding: 0.25rem 0.7rem;

@@ -1,4 +1,6 @@
 @let searchResults = (searchResults$ | async) || [];
+@let requestStatus = (requestStatus$ | async) || 'idle';
+@let errorMessage = errorMessage$ | async;
 @let historyList = (historyList$ | async) || [];
 @let params = (params$ | async) || defaultSearchParams;
 @let theme = theme$ | async;
@@ -108,10 +110,24 @@
             }
         </section>
 
-        @if (searchResults.length) {
+        @if (requestStatus === 'success') {
             <app-browser-search-data [dataList]="searchResults"></app-browser-search-data>
-        } @else if (hasSearched) {
-            <div class="error-block">Ничего не найдено. Попробуйте другой запрос или категорию.</div>
+        } @else if (requestStatus === 'loading') {
+            <div class="status-block status-block--loading">
+                Ищу результаты{{ currentSearchMode === SearchMode.Global ? ' в Google Books' : '' }}...
+            </div>
+        } @else if (requestStatus === 'error') {
+            <div class="status-block status-block--error">
+                {{ errorMessage || 'Во время поиска произошла ошибка.' }}
+            </div>
+        } @else if (requestStatus === 'empty') {
+            <div class="status-block">
+                {{
+                    currentSearchMode === SearchMode.Global
+                        ? 'По этому запросу в Google Books ничего не найдено.'
+                        : 'Ничего не найдено. Попробуйте другой запрос или категорию.'
+                }}
+            </div>
         }
     </div>
 </div>

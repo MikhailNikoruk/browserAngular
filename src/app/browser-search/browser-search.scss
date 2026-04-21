@@ -185,7 +185,7 @@
   cursor: pointer;
 }
 
-.error-block {
+.status-block {
   margin: 2rem auto 0;
   padding: 1.5rem;
   border: 1px dashed var(--panel-border);
@@ -193,6 +193,33 @@
   text-align: center;
   color: var(--text-secondary);
   background: var(--panel-bg);
+}
+
+.status-block--loading {
+  position: relative;
+}
+
+.status-block--loading::before {
+  content: '';
+  display: inline-block;
+  width: 0.85rem;
+  height: 0.85rem;
+  margin-right: 0.65rem;
+  border: 2px solid var(--panel-border);
+  border-top-color: var(--button-bg);
+  border-radius: 50%;
+  vertical-align: -0.1rem;
+  animation: status-spin 800ms linear infinite;
+}
+
+.status-block--error {
+  border-style: solid;
+}
+
+@keyframes status-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 840px) {

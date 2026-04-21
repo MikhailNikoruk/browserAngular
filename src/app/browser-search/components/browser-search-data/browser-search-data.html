@@ -1,5 +1,5 @@
 <div class="data-list">
-    @for (dataItem of dataList(); track dataItem.id;) {
+    @for (dataItem of dataList(); track dataItem.id || $index) {
         <div class="data-item">
             <div class="data-item__header">
                 <div class="data-item__position">
@@ -11,9 +11,13 @@
                 </span>
             </div>
 
-            <a [href]="dataItem.link" target="_blank" rel="noreferrer">
-                {{ dataItem.link }}
-            </a>
+            @if (dataItem.link) {
+                <a [href]="dataItem.link" target="_blank" rel="noreferrer">
+                    {{ dataItem.link }}
+                </a>
+            } @else {
+                <span class="data-item__link data-item__link--muted">Ссылка недоступна</span>
+            }
 
             <div class="data-item__category">
                 {{ dataItem.category }}
