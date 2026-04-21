@@ -1,6 +1,39 @@
-import { SearchDataItem } from "../types"
+import { SearchCategory, SearchDataItem } from '../types';
 
-export const SEARCH_DATA_LIST: SearchDataItem[] = [
+const SEARCH_ITEM_CATEGORIES: Record<string, SearchCategory> = {
+  'news-001': 'architecture',
+  'news-002': 'javascript',
+  'news-003': 'performance',
+  'news-004': 'browser',
+  'news-005': 'browser',
+  'news-006': 'browser',
+  'news-007': 'javascript',
+  'news-008': 'css',
+  'news-009': 'css',
+  'news-010': 'css',
+  'news-011': 'frontend',
+  'news-012': 'frontend',
+  'news-013': 'architecture',
+  'news-014': 'javascript',
+  'news-015': 'frontend',
+  'news-016': 'architecture',
+  'news-017': 'browser',
+  'news-018': 'performance',
+  'news-019': 'testing',
+  'news-020': 'css',
+  'news-021': 'browser',
+  'news-022': 'performance',
+  'news-023': 'browser',
+  'news-024': 'architecture',
+  'news-025': 'frontend',
+  'news-026': 'testing',
+  'news-027': 'architecture',
+  'news-028': 'performance',
+  'news-029': 'browser',
+  'news-030': 'architecture',
+};
+
+const RAW_SEARCH_DATA_LIST: Omit<SearchDataItem, 'category'>[] = [
     {
         id: 'news-001',
         title: 'Зачем нужен bundler и что он делает',
@@ -180,11 +213,10 @@ export const SEARCH_DATA_LIST: SearchDataItem[] = [
         title: 'Дизайн-система на минималках: кнопки, поля, токены',
         text: 'Как начать с маленького UI-kit и не утонуть: базовые компоненты и правила использования.',
         link: 'https://example.com/frontend/design-system-basics'
-    },
-    {
-        id: 'news-031',
-        title: 'test',
-        text: 'test test test',
-        link: 'https://test.com'
     }
 ];
+
+export const SEARCH_DATA_LIST: SearchDataItem[] = RAW_SEARCH_DATA_LIST.map((item) => ({
+  ...item,
+  category: SEARCH_ITEM_CATEGORIES[item.id] ?? 'frontend',
+}));

@@ -1,69 +1,83 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
+
+import { SearchCategory, SearchParams } from '../../types';
+import { DEFAULT_SEARCH_PARAMS } from '../../services';
 
 interface SearchFormControls {
-    query: FormControl<string>;
+  query: FormControl<string>;
+  category: FormControl<SearchCategory>;
 }
 
 @Component({
-    selector: 'app-browser-search-form',
-    imports: [ReactiveFormsModule],
-    templateUrl: './browser-search-form.html',
-    styleUrl: './browser-search-form.scss',
+  selector: 'app-browser-search-form',
+  imports: [ReactiveFormsModule],
+  templateUrl: './browser-search-form.html',
+  styleUrl: './browser-search-form.scss',
 })
-export class BrowserSearchForm {
-    @Output() submitEvent = new EventEmitter<string>();
-    @Output() resetEvent = new EventEmitter<void>();
+export class BrowserSearchForm implements OnChanges {
+  @Input() params: SearchParams = DEFAULT_SEARCH_PARAMS;
+  @Input() categoryDisabled = false;
+  @Input() categories: SearchCategory[] = [];
+  @Input() categoryLabels: Record<SearchCategory, string> = {
+    all: 'Все темы',
+    frontend: 'Frontend',
+    javascript: 'JavaScript',
+    css: 'CSS',
+    performance: 'Performance',
+    architecture: 'Architecture',
+    testing: 'Testing',
+    browser: 'Browser',
+  };
 
-    protected searchForm = new FormGroup<SearchFormControls>({
-        query: new FormControl('', { nonNullable: true }),
+  @Output() submitEvent = new EventEmitter<SearchParams>();
+  @Output() resetEvent = new EventEmitter<void>();
+
+  protected readonly searchForm = new FormGroup<SearchFormControls>({
+    query: new FormControl(DEFAULT_SEARCH_PARAMS.query, { nonNullable: true }),
+    category: new FormControl(DEFAULT_SEARCH_PARAMS.category, { nonNullable: true }),
+  });
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (!changes['params']) {
+      return;
+    }
+
+    this.searchForm.patchValue(this.params, { emitEvent: false });
+  }
+
+  protected get queryControl(): FormControl<string> {
+    return this.searchForm.controls.query;
+  }
+
+  protected get queryValue(): string {
+    return this.queryControl.value;
+  }
+
+  protected get categoryValue(): SearchCategory {
+    return this.searchForm.controls.category.value;
+  }
+
+  protected submitForm(): void {
+    const formValue = this.searchForm.getRawValue();
+    const normalizedQuery = formValue.query.trim();
+
+    if (normalizedQuery !== formValue.query) {
+      this.queryControl.setValue(normalizedQuery, { emitEvent: false });
+    }
+
+    this.submitEvent.emit({
+      query: normalizedQuery,
+      category: formValue.category,
     });
+  }
 
-    protected get queryControl(): FormControl<string> {
-        return this.searchForm.controls.query;
-    }
+  protected resetForm(): void {
+    this.searchForm.reset(DEFAULT_SEARCH_PARAMS);
+    this.resetEvent.emit();
+  }
 
-    protected get queryValue(): string {
-        return this.queryControl.value;
-    }
-
-    constructor() {
-        this.watchFormValidation();
-    }
-
-    protected submitForm(): void {
-        const rawQuery: string = this.queryValue;
-        const validatedQuery: string = rawQuery.trim();
-
-        if (validatedQuery !== rawQuery) {
-            this.queryControl.setValue(validatedQuery);
-        }
-
-        this.submitEvent.emit(validatedQuery);
-    }
-
-    protected resetForm(): void {
-        this.searchForm.reset();
-        this.resetEvent.emit();
-    }
-
-    private watchFormValidation() {
-        this.queryControl.valueChanges
-            .pipe(
-                debounceTime(1000),
-                filter(((newQuery: string) => newQuery.length > 0)),
-                map((newQuery: string) => {
-                    const trimmedQuery = newQuery.trim();
-                    return trimmedQuery;
-                }),
-                distinctUntilChanged(),
-                takeUntilDestroyed()
-            )
-            .subscribe((validatedQuery: string) => {
-                console.log('validatedQuery =>', validatedQuery);
-                this.queryControl.setValue(validatedQuery, {emitEvent: false});
-            });
-    }
+  protected getCategoryLabel(category: SearchCategory): string {
+    return this.categoryLabels[category] ?? category;
+  }
 }

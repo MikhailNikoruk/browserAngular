@@ -1,47 +1,117 @@
 @let searchResults = (searchResults$ | async) || [];
 @let historyList = (historyList$ | async) || [];
-@let state = state$ | async;
+@let params = (params$ | async) || defaultSearchParams;
+@let theme = theme$ | async;
 
-<p>
-    Режим поиска: {{currentSearchMode === SearchMode.Global ? 'Глобальный' : 'Локальный'}}
-    <button (click)="selectSearchMode(SearchMode.Global)">Глобальный</button>
-    <button (click)="selectSearchMode(SearchMode.Local)">Локальный</button>
-</p>
+<div class="browser-search" [class.theme-light]="theme !== 'dark'" [class.theme-dark]="theme === 'dark'">
+    <div class="browser-search__shell">
+        <header class="browser-search__header">
+            <div>
+                <p class="browser-search__eyebrow">Lesson 18-19 Practice</p>
+                <h2 class="browser-search__title">Браузерный поиск</h2>
+                <p class="browser-search__subtitle">
+                    Поиск по локальным карточкам и Google Books с историей запросов, темой и сохранением состояния.
+                </p>
+            </div>
 
-<p>
-    Текущая тема: {{state?.theme === 'light' ? 'Светлая' : 'Темная'}}
-    <button (click)="selectTheme('light')">Светлая</button>
-    <button (click)="selectTheme('dark')">Темная</button>
-</p>
+            <div class="browser-search__controls">
+                <div class="control-group">
+                    <span class="control-group__label">Режим поиска</span>
 
-<br/>
-<br/>
+                    <div class="pill-group">
+                        <button
+                            class="pill-button"
+                            type="button"
+                            [class.pill-button--active]="currentSearchMode === SearchMode.Local"
+                            (click)="selectSearchMode(SearchMode.Local)"
+                        >
+                            Локальный
+                        </button>
 
-<app-browser-search-form
-    class="search-form"
-    (submitEvent)="handleNewSearch($event)"
-    (resetEvent)="handleResetSearch()"
-></app-browser-search-form>
+                        <button
+                            class="pill-button"
+                            type="button"
+                            [class.pill-button--active]="currentSearchMode === SearchMode.Global"
+                            (click)="selectSearchMode(SearchMode.Global)"
+                        >
+                            Глобальный
+                        </button>
+                    </div>
+                </div>
 
-<div class="query-history">
-    <p>
-        Прошлые запросы
-    </p>
+                <div class="control-group">
+                    <span class="control-group__label">Тема</span>
 
-    <ul>
-        @for (historyItem of historyList; track historyItem) {
-            <li class="query-value" (click)="applyLastQuery(historyItem)">
-                {{ historyItem }}
-            </li>
+                    <div class="pill-group">
+                        <button
+                            class="pill-button"
+                            type="button"
+                            [class.pill-button--active]="theme !== 'dark'"
+                            (click)="selectTheme('light')"
+                        >
+                            Светлая
+                        </button>
+
+                        <button
+                            class="pill-button"
+                            type="button"
+                            [class.pill-button--active]="theme === 'dark'"
+                            (click)="selectTheme('dark')"
+                        >
+                            Темная
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="browser-search__panel">
+            <app-browser-search-form
+                [params]="params"
+                [categories]="searchCategories"
+                [categoryLabels]="searchCategoryLabels"
+                [categoryDisabled]="isCategoryDisabled"
+                (submitEvent)="handleNewSearch($event)"
+                (resetEvent)="handleResetSearch()"
+            ></app-browser-search-form>
+
+            @if (currentSearchMode === SearchMode.Global) {
+                <p class="browser-search__hint browser-search__hint--top">
+                    В глобальном режиме категория не влияет на результаты и сохраняется для локального поиска.
+                </p>
+            }
+        </section>
+
+        <section class="browser-search__history">
+            <div class="browser-search__section-header">
+                <h3>История запросов</h3>
+
+                @if (historyList.length) {
+                    <button class="pill-button" type="button" (click)="clearHistory()">
+                        Очистить историю
+                    </button>
+                }
+            </div>
+
+            @if (historyList.length) {
+                <ul class="history-list">
+                    @for (historyItem of historyList; track historyItem) {
+                        <li>
+                            <button class="history-button" type="button" (click)="applyLastQuery(historyItem)">
+                                {{ historyItem }}
+                            </button>
+                        </li>
+                    }
+                </ul>
+            } @else {
+                <p class="browser-search__hint">История появится после первого успешного поиска.</p>
+            }
+        </section>
+
+        @if (searchResults.length) {
+            <app-browser-search-data [dataList]="searchResults"></app-browser-search-data>
+        } @else if (hasSearched) {
+            <div class="error-block">Ничего не найдено. Попробуйте другой запрос или категорию.</div>
         }
-    </ul>
+    </div>
 </div>
-
-@if (searchResults.length) {
-    <app-browser-search-data
-        class="data-list"
-        [dataList]="searchResults"
-    ></app-browser-search-data>
-} @else {
-    <div class="error-block">ничего не нашли</div>
-}

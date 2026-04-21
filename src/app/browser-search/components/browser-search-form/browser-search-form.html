@@ -1,30 +1,36 @@
-<form
-    class="search-form"
-    [formGroup]="searchForm"
-    (ngSubmit)="submitForm()"
->
-    <input
-        class="search-field"
-        formControlName="query"
-        type="text"
-        placeholder="Введите запрос"
-    >
+<form class="search-form" [formGroup]="searchForm" (ngSubmit)="submitForm()">
+    <label class="search-form__field">
+        <span class="search-form__label">Запрос</span>
 
-    @if (queryValue) {
-        <button
-            class="form-button"
-            type="button"
-            (click)="resetForm()"
+        <input
+            class="search-field"
+            formControlName="query"
+            type="text"
+            placeholder="Введите запрос"
         >
-            X
+    </label>
+
+    <label class="search-form__field search-form__field--compact">
+        <span class="search-form__label">Категория</span>
+
+        <select class="search-select" formControlName="category" [disabled]="categoryDisabled">
+            @for (category of categories; track category) {
+                <option [value]="category">
+                    {{ getCategoryLabel(category) }}
+                </option>
+            }
+        </select>
+    </label>
+
+    <div class="search-form__actions">
+        @if (queryValue || categoryValue !== 'all') {
+            <button class="form-button form-button--secondary" type="button" (click)="resetForm()">
+                Сбросить
+            </button>
+        }
+
+        <button class="form-button" type="submit">
+            Найти
         </button>
-    }
-
-    <button
-        class="form-button"
-        type="submit"
-    >
-        Найти
-    </button>
+    </div>
 </form>
-

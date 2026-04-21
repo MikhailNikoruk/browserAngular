@@ -1,7 +1,7 @@
-import { GoogleBookItemDto } from "./google-book-item.dto";
+import { GoogleBookItemDto } from './google-book-item.dto';
 
 export type GoogleBooksResponseDto = {
-    kind: string;
-    totalItems: number;
-    items: GoogleBookItemDto[];
+  kind: string;
+  totalItems: number;
+  items?: GoogleBookItemDto[];
 };

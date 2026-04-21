@@ -1,78 +1,69 @@
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of } from 'rxjs';
 
-import { SearchDataItem } from '../types';
+import { SearchDataItem, SearchParams } from '../types';
 import { SEARCH_DATA_LIST } from '../consts';
 import { GoogleSearchApiService } from '../../api/services';
 import { GoogleBookItemDto, GoogleBooksResponseDto } from '../../api/dtos';
 
 @Injectable()
 export class BrowserDataService {
-    private dataList: BehaviorSubject<SearchDataItem[]> = new BehaviorSubject<SearchDataItem[]>([]); // Observable + Observer
-    public dataList$: Observable<SearchDataItem[]> = this.dataList.asObservable();
+  private readonly googleApi = inject(GoogleSearchApiService);
+  private readonly dataListSubject = new BehaviorSubject<SearchDataItem[]>([]);
 
-    private historyList = new BehaviorSubject<string[]>([]); // Observable + Observer
-    historyList$ = this.historyList.asObservable();
+  public readonly dataList$: Observable<SearchDataItem[]> = this.dataListSubject.asObservable();
 
-    private readonly googleApi = inject(GoogleSearchApiService);
+  public findLocalData(params: SearchParams): void {
+    const normalizedQuery = this.normalizeQuery(params.query);
+    const filteredDataList = SEARCH_DATA_LIST.filter((item) => {
+      const matchesCategory = params.category === 'all' || item.category === params.category;
+      const matchesQuery =
+        !normalizedQuery ||
+        item.title.toLowerCase().includes(normalizedQuery) ||
+        item.text.toLowerCase().includes(normalizedQuery);
 
-    findLocalData(query: string) {
-        console.log('>>> [local] findData =>', query);
-        this.checkHistory(query);
-        const validateQuery: string = this.validateQuery(query);
+      return matchesCategory && matchesQuery;
+    });
 
-        const filteredDataList: SearchDataItem[] = SEARCH_DATA_LIST.filter((item: SearchDataItem) => {
-            const validatedItemTitle = item.title.toLowerCase();
-            const isQueryInTitle = validatedItemTitle.includes(validateQuery);
+    this.dataListSubject.next(filteredDataList);
+  }
 
-            const validatedItemText = item.text.toLowerCase();
-            const isQueryInText = validatedItemText.includes(validateQuery);
+  public findGlobalData(query: string): void {
+    const normalizedQuery = query.trim();
 
-            return isQueryInTitle || isQueryInText;
-        });
-
-        // this.dataList = filteredDataList;
-        this.dataList.next(filteredDataList);
+    if (!normalizedQuery) {
+      this.resetData();
+      return;
     }
 
-    findGlobalData(query: string) {
-        console.log('>>> [global] findData =>', query);
-        this.checkHistory(query);
-        const validateQuery: string = this.validateQuery(query);
+    this.googleApi
+      .searchDataByText(normalizedQuery)
+      .pipe(
+        map((response: GoogleBooksResponseDto) =>
+          (response.items ?? []).map((item: GoogleBookItemDto) => this.mapGoogleBook(item)),
+        ),
+        catchError(() => of([])),
+      )
+      .subscribe((results) => {
+        this.dataListSubject.next(results);
+      });
+  }
 
-        this.googleApi
-            .searchDataByText(validateQuery)
-            .subscribe((response: GoogleBooksResponseDto) => {
-                const results: SearchDataItem[] = response.items
-                    .map((item: GoogleBookItemDto) => {
-                        return {
-                            id: item.id || '',
-                            title: item.volumeInfo.title || '',
-                            text: item.volumeInfo.description
-                                ? item.volumeInfo.description?.slice(0, 100)+'..'
-                                : '',
-                            link: item.selfLink || ''
-                        } as SearchDataItem
-                    });
+  public resetData(): void {
+    this.dataListSubject.next([]);
+  }
 
-                this.dataList.next(results);
-            });
-    }
+  private normalizeQuery(query: string): string {
+    return query.trim().toLowerCase();
+  }
 
-    private checkHistory(query: string) {
-        const oldHistoryList: string[] = this.historyList.getValue();
-
-        if (!oldHistoryList.includes(query)) {
-            const newHistoryList = [query, ...oldHistoryList];
-            this.historyList.next(newHistoryList);
-        }
-    }
-
-    private validateQuery(query: string): string {
-        return query.toLowerCase();
-    }
-
-    resetData() {
-        this.dataList.next([]);
-    }
+  private mapGoogleBook(item: GoogleBookItemDto): SearchDataItem {
+    return {
+      id: item.id || '',
+      title: item.volumeInfo.title || 'Untitled',
+      text: item.volumeInfo.description ? `${item.volumeInfo.description.slice(0, 120)}...` : '',
+      link: item.selfLink || '',
+      category: 'all',
+    };
+  }
 }

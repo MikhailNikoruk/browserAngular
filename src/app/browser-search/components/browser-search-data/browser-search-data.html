@@ -11,9 +11,13 @@
                 </span>
             </div>
 
-            <a [href]="dataItem.link">
+            <a [href]="dataItem.link" target="_blank" rel="noreferrer">
                 {{ dataItem.link }}
             </a>
+
+            <div class="data-item__category">
+                {{ dataItem.category }}
+            </div>
 
             <div class="data-item__text">
                 {{ dataItem.text }}
