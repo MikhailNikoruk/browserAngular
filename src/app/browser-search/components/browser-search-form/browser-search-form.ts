@@ -40,11 +40,11 @@ export class BrowserSearchForm implements OnChanges {
   });
 
   public ngOnChanges(changes: SimpleChanges): void {
-    if (!changes['params']) {
-      return;
+    if (changes['params']) {
+      this.searchForm.patchValue(this.params, { emitEvent: false });
     }
 
-    this.searchForm.patchValue(this.params, { emitEvent: false });
+    this.updateControlStates();
   }
 
   protected get queryControl(): FormControl<string> {
@@ -88,5 +88,20 @@ export class BrowserSearchForm implements OnChanges {
 
   protected getCategoryLabel(category: SearchCategory): string {
     return this.categoryLabels[category] ?? category;
+  }
+
+  private updateControlStates(): void {
+    if (this.isLoading) {
+      this.queryControl.disable({ emitEvent: false });
+    } else {
+      this.queryControl.enable({ emitEvent: false });
+    }
+
+    if (this.categoryDisabled || this.isLoading) {
+      this.searchForm.controls.category.disable({ emitEvent: false });
+      return;
+    }
+
+    this.searchForm.controls.category.enable({ emitEvent: false });
   }
 }

@@ -9,14 +9,13 @@
             placeholder="Введите запрос"
             inputmode="search"
             autocomplete="off"
-            [disabled]="isLoading"
         >
     </label>
 
     <label class="search-form__field search-form__field--compact">
         <span class="search-form__label">Категория</span>
 
-        <select class="search-select" formControlName="category" [disabled]="categoryDisabled || isLoading">
+        <select class="search-select" formControlName="category">
             @for (category of categories; track category) {
                 <option [value]="category">
                     {{ getCategoryLabel(category) }}
