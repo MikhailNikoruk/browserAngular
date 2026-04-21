@@ -118,3 +118,23 @@
 - Запрос сохраняется в историю → при перезагрузке история остаётся
 - Клик по истории подставляет запрос в форму
 - Переключение темы меняет фон/карточки/кнопки и сохраняется между перезагрузками
+
+---
+
+# Deploy на GitHub Pages
+
+В проект добавлен workflow [.github/workflows/deploy-pages.yml](.github/workflows/deploy-pages.yml), который:
+- запускается при push в `master` или `main`
+- устанавливает зависимости
+- прогоняет тесты
+- собирает Angular-приложение
+- публикует результат в GitHub Pages
+
+Чтобы деплой заработал в GitHub:
+- откройте `Settings -> Pages`
+- в разделе `Build and deployment` выберите `Source: GitHub Actions`
+- убедитесь, что репозиторий лежит на GitHub и workflow имеет доступ к Pages
+
+`base href` для GitHub Pages вычисляется автоматически:
+- для project pages будет `/<repo-name>/`
+- для user pages (`<owner>.github.io`) будет `/`
