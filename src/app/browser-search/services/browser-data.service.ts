@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, map, Observable, of, Subject, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of, Subject, switchMap } from 'rxjs';
 
 import { SearchDataItem, SearchParams, SearchRequestStatus } from '../types';
 import { SEARCH_DATA_LIST } from '../consts';
@@ -12,22 +12,33 @@ export class BrowserDataService {
   private readonly dataListSubject = new BehaviorSubject<SearchDataItem[]>([]);
   private readonly requestStatusSubject = new BehaviorSubject<SearchRequestStatus>('idle');
   private readonly errorMessageSubject = new BehaviorSubject<string | null>(null);
-  private readonly globalSearchQuerySubject = new Subject<string>();
+  private readonly globalSearchQuerySubject = new Subject<string | null>();
 
   public readonly dataList$: Observable<SearchDataItem[]> = this.dataListSubject.asObservable();
   public readonly requestStatus$: Observable<SearchRequestStatus> =
     this.requestStatusSubject.asObservable();
   public readonly errorMessage$: Observable<string | null> = this.errorMessageSubject.asObservable();
 
+  public getRequestStatus(): SearchRequestStatus {
+    return this.requestStatusSubject.getValue();
+  }
+
   public constructor() {
     this.globalSearchQuerySubject
       .pipe(
-        tap(() => {
+        switchMap((query) => {
+          if (!query) {
+            return of({
+              results: [] as SearchDataItem[],
+              errorMessage: null,
+              status: 'idle' as const,
+            });
+          }
+
           this.errorMessageSubject.next(null);
           this.requestStatusSubject.next('loading');
-        }),
-        switchMap((query) =>
-          this.googleApi.searchDataByText(query).pipe(
+
+          return this.googleApi.searchDataByText(query).pipe(
             map((response) => ({
               results: (response.items ?? []).map((item: GoogleBookItemDto) => this.mapGoogleBook(item)),
               errorMessage: null,
@@ -40,17 +51,21 @@ export class BrowserDataService {
                 status: 'error' as const,
               }),
             ),
-          ),
-        ),
+          );
+        }),
       )
       .subscribe(({ errorMessage, results, status }) => {
         this.dataListSubject.next(results);
         this.errorMessageSubject.next(errorMessage);
-        this.requestStatusSubject.next(results.length || status === 'error' ? status : 'empty');
+        this.requestStatusSubject.next(
+          status === 'idle' || status === 'error' || results.length ? status : 'empty',
+        );
       });
   }
 
   public findLocalData(params: SearchParams): void {
+    this.globalSearchQuerySubject.next(null);
+
     const normalizedQuery = this.normalizeQuery(params.query);
     const filteredDataList = SEARCH_DATA_LIST.filter((item) => {
       const matchesCategory = params.category === 'all' || item.category === params.category;
@@ -79,9 +94,7 @@ export class BrowserDataService {
   }
 
   public resetData(): void {
-    this.dataListSubject.next([]);
-    this.errorMessageSubject.next(null);
-    this.requestStatusSubject.next('idle');
+    this.globalSearchQuerySubject.next(null);
   }
 
   private normalizeQuery(query: string): string {

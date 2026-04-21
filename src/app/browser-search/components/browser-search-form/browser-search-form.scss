@@ -27,6 +27,12 @@
   color: var(--muted-text);
 }
 
+.search-form__hint {
+  color: var(--muted-text);
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
 .search-field,
 .search-select {
   min-height: 3rem;
@@ -69,6 +75,12 @@
 
 .form-button:hover {
   transform: translateY(-1px);
+}
+
+.form-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.72;
+  transform: none;
 }
 
 .form-button--secondary {

@@ -216,6 +216,11 @@
   border-style: solid;
 }
 
+.status-block--idle {
+  border-style: solid;
+  opacity: 0.92;
+}
+
 @keyframes status-spin {
   to {
     transform: rotate(360deg);

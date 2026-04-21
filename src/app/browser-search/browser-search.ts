@@ -40,6 +40,10 @@ export class BrowserSearch {
   protected readonly SearchMode = SearchMode;
   protected currentSearchMode: SearchMode = SearchMode.Local;
 
+  protected get isLoading(): boolean {
+    return this.dataService.getRequestStatus() === 'loading';
+  }
+
   protected handleNewSearch(params: SearchParams): void {
     const normalizedParams = this.normalizeParams(params);
     this.searchParamsService.updateParams(normalizedParams);

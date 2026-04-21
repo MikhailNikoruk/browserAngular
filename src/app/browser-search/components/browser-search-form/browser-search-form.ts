@@ -18,6 +18,7 @@ interface SearchFormControls {
 export class BrowserSearchForm implements OnChanges {
   @Input() params: SearchParams = DEFAULT_SEARCH_PARAMS;
   @Input() categoryDisabled = false;
+  @Input() isLoading = false;
   @Input() categories: SearchCategory[] = [];
   @Input() categoryLabels: Record<SearchCategory, string> = {
     all: 'Все темы',
@@ -56,6 +57,14 @@ export class BrowserSearchForm implements OnChanges {
 
   protected get categoryValue(): SearchCategory {
     return this.searchForm.controls.category.value;
+  }
+
+  protected get canSubmit(): boolean {
+    if (this.categoryDisabled) {
+      return Boolean(this.queryValue.trim());
+    }
+
+    return Boolean(this.queryValue.trim()) || this.categoryValue !== DEFAULT_SEARCH_PARAMS.category;
   }
 
   protected submitForm(): void {

@@ -7,30 +7,39 @@
             formControlName="query"
             type="text"
             placeholder="Введите запрос"
+            inputmode="search"
+            autocomplete="off"
+            [disabled]="isLoading"
         >
     </label>
 
     <label class="search-form__field search-form__field--compact">
         <span class="search-form__label">Категория</span>
 
-        <select class="search-select" formControlName="category" [disabled]="categoryDisabled">
+        <select class="search-select" formControlName="category" [disabled]="categoryDisabled || isLoading">
             @for (category of categories; track category) {
                 <option [value]="category">
                     {{ getCategoryLabel(category) }}
                 </option>
             }
         </select>
+
+        @if (categoryDisabled) {
+            <span class="search-form__hint">
+                В глобальном режиме категория сохраняется, но не участвует в поиске.
+            </span>
+        }
     </label>
 
     <div class="search-form__actions">
         @if (queryValue || categoryValue !== 'all') {
-            <button class="form-button form-button--secondary" type="button" (click)="resetForm()">
+            <button class="form-button form-button--secondary" type="button" [disabled]="isLoading" (click)="resetForm()">
                 Сбросить
             </button>
         }
 
-        <button class="form-button" type="submit">
-            Найти
+        <button class="form-button" type="submit" [disabled]="!canSubmit || isLoading">
+            {{ isLoading ? 'Ищу...' : 'Найти' }}
         </button>
     </div>
 </form>

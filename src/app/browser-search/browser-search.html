@@ -73,6 +73,7 @@
                 [categories]="searchCategories"
                 [categoryLabels]="searchCategoryLabels"
                 [categoryDisabled]="isCategoryDisabled"
+                [isLoading]="isLoading"
                 (submitEvent)="handleNewSearch($event)"
                 (resetEvent)="handleResetSearch()"
             ></app-browser-search-form>
@@ -126,6 +127,14 @@
                     currentSearchMode === SearchMode.Global
                         ? 'По этому запросу в Google Books ничего не найдено.'
                         : 'Ничего не найдено. Попробуйте другой запрос или категорию.'
+                }}
+            </div>
+        } @else {
+            <div class="status-block status-block--idle">
+                {{
+                    currentSearchMode === SearchMode.Global
+                        ? 'Введите запрос, чтобы выполнить поиск по Google Books.'
+                        : 'Введите запрос или выберите категорию, чтобы отфильтровать локальные материалы.'
                 }}
             </div>
         }
