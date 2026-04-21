@@ -1,1 +1,1 @@
-export {BrowserSearch} from './browser-search';
+export { BrowserSearch } from './browser-search';

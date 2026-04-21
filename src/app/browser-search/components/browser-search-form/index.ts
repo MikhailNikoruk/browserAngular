@@ -1,1 +1,1 @@
-export {BrowserSearchForm} from './browser-search-form';
+export { BrowserSearchForm } from './browser-search-form';

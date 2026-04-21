@@ -1,1 +1,1 @@
-export {SearchMode} from './search-mode.enum';
+export { SearchMode } from './search-mode.enum';

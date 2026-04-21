@@ -8,5 +8,4 @@ import { BrowserSearch } from './browser-search';
   imports: [BrowserSearch]
 })
 export class App {
-  protected readonly title = 'browser search';
 }
