@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 
 import { BrowserSearchForm, BrowserSearchData } from './components';
 import { SEARCH_CATEGORY_LABELS } from './consts';
-import { SEARCH_CATEGORIES, SearchDataItem, SearchParams } from './types';
+import { SEARCH_CATEGORIES, SearchDataItem, SearchParams, SearchRequestStatus } from './types';
 import {
   BrowserDataService,
   DEFAULT_SEARCH_PARAMS,
@@ -29,6 +29,8 @@ export class BrowserSearch {
 
   protected readonly defaultSearchParams = DEFAULT_SEARCH_PARAMS;
   protected readonly searchResults$: Observable<SearchDataItem[]> = this.dataService.dataList$;
+  protected readonly requestStatus$: Observable<SearchRequestStatus> = this.dataService.requestStatus$;
+  protected readonly errorMessage$: Observable<string | null> = this.dataService.errorMessage$;
   protected readonly historyList$: Observable<string[]> = this.historyService.history$;
   protected readonly params$: Observable<SearchParams> = this.searchParamsService.params$;
   protected readonly theme$: Observable<Theme> = this.themeService.theme$;
@@ -42,21 +44,12 @@ export class BrowserSearch {
   protected handleNewSearch(params: SearchParams): void {
     const normalizedParams = this.normalizeParams(params);
     this.searchParamsService.updateParams(normalizedParams);
-
-    if (!normalizedParams.query) {
-      this.handleResetSearch();
-      return;
-    }
-
-    this.hasSearched = true;
-    this.executeSearch(normalizedParams);
-    this.historyService.addQuery(normalizedParams.query);
+    this.runSearch(normalizedParams, true);
   }
 
   protected handleResetSearch(): void {
-    this.hasSearched = false;
     this.searchParamsService.resetParams();
-    this.dataService.resetData();
+    this.clearSearchState();
   }
 
   protected applyLastQuery(query: string): void {
@@ -66,9 +59,7 @@ export class BrowserSearch {
     });
 
     this.searchParamsService.updateParams(params);
-    this.hasSearched = true;
-    this.executeSearch(params);
-    this.historyService.addQuery(params.query);
+    this.runSearch(params, true);
   }
 
   protected selectSearchMode(mode: SearchMode): void {
@@ -76,12 +67,12 @@ export class BrowserSearch {
 
     const params = this.searchParamsService.getParams();
 
-    if (!params.query) {
+    if (!this.canSearch(params)) {
+      this.clearSearchState();
       return;
     }
 
-    this.hasSearched = true;
-    this.executeSearch(params);
+    this.runSearch(params);
   }
 
   protected selectTheme(newTheme: Theme): void {
@@ -110,5 +101,32 @@ export class BrowserSearch {
       ...params,
       query: params.query.trim(),
     };
+  }
+
+  private runSearch(params: SearchParams, saveToHistory = false): void {
+    if (!this.canSearch(params)) {
+      this.clearSearchState();
+      return;
+    }
+
+    this.hasSearched = true;
+    this.executeSearch(params);
+
+    if (saveToHistory && params.query) {
+      this.historyService.addQuery(params.query);
+    }
+  }
+
+  private clearSearchState(): void {
+    this.hasSearched = false;
+    this.dataService.resetData();
+  }
+
+  private canSearch(params: SearchParams): boolean {
+    if (this.currentSearchMode === SearchMode.Global) {
+      return Boolean(params.query);
+    }
+
+    return Boolean(params.query) || params.category !== DEFAULT_SEARCH_PARAMS.category;
   }
 }

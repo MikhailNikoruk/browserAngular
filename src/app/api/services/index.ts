@@ -1,1 +1,1 @@
-export {GoogleSearchApiService} from './google-search-api.service';
+export { GoogleSearchApiService } from './google-search-api.service';
