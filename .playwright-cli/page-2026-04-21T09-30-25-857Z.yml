@@ -1,0 +1,96 @@
+- generic [ref=e5]:
+  - banner [ref=e6]:
+    - generic [ref=e7]:
+      - paragraph [ref=e8]: Browser Search Workspace
+      - generic [ref=e9]:
+        - heading "Search OS" [level=1] [ref=e10]
+        - generic [ref=e11]: Local mode
+      - paragraph [ref=e12]: "Рабочее пространство для учебного поиска: один экран для локальной коллекции, внешнего каталога, сохранённой истории и быстрых переключателей режима."
+    - generic [ref=e13]:
+      - article [ref=e14]:
+        - paragraph [ref=e15]: Scope
+        - strong [ref=e16]: All topics
+        - generic [ref=e17]: Текущий фильтр каталога
+      - article [ref=e18]:
+        - paragraph [ref=e19]: History
+        - strong [ref=e20]: "0"
+        - generic [ref=e21]: Сохранённых запросов
+      - article [ref=e22]:
+        - paragraph [ref=e23]: Results
+        - strong [ref=e24]: "0"
+        - generic [ref=e25]: Пока без выдачи
+      - article [ref=e26]:
+        - paragraph [ref=e27]: Theme
+        - strong [ref=e28]: Light
+        - generic [ref=e29]: Активная визуальная тема
+  - generic [ref=e30]:
+    - generic [ref=e31]:
+      - generic [ref=e33]:
+        - paragraph [ref=e34]: Search desk
+        - heading "Браузерный поиск для учебных материалов и книг" [level=2] [ref=e35]
+        - paragraph [ref=e36]: Собирайте запросы, меняйте источник поиска и отслеживайте состояние выдачи в одном рабочем пространстве без переключения между экранами.
+        - generic [ref=e37]:
+          - generic [ref=e38]: Local index
+          - generic [ref=e39]: Workspace idle
+          - generic [ref=e40]: Local collection
+      - generic [ref=e41]:
+        - generic [ref=e42]:
+          - generic [ref=e43]:
+            - paragraph [ref=e44]: Search builder
+            - heading "Соберите запрос и переключайтесь между локальной базой и внешним каталогом." [level=3] [ref=e45]
+          - paragraph [ref=e46]: Локальный режим поддерживает поиск по категории даже без текстового запроса.
+        - generic [ref=e48]:
+          - generic [ref=e49]:
+            - generic [ref=e50]: Запрос
+            - textbox "Запрос Пробуйте точный термин, фамилию автора или тематический фрагмент." [ref=e51]:
+              - /placeholder: Введите запрос
+            - generic [ref=e52]: Пробуйте точный термин, фамилию автора или тематический фрагмент.
+          - generic [ref=e53]:
+            - generic [ref=e54]: Категория
+            - combobox "Категория" [ref=e55]:
+              - option "Все темы" [selected]
+              - option "Frontend"
+              - option "JavaScript"
+              - option "CSS"
+              - option "Performance"
+              - option "Architecture"
+              - option "Testing"
+              - option "Browser"
+          - button "Найти материалы" [disabled] [ref=e57]
+      - generic [ref=e58]:
+        - paragraph [ref=e59]: Ready
+        - heading "Начните с текста запроса или выберите тематическую категорию." [level=3] [ref=e60]
+        - paragraph [ref=e61]: Локальная коллекция хорошо работает как по полному запросу, так и по тематическому фильтру.
+    - complementary [ref=e62]:
+      - generic [ref=e63]:
+        - generic [ref=e64]:
+          - generic [ref=e65]: Search mode
+          - generic [ref=e66]:
+            - button "Local" [ref=e67] [cursor=pointer]
+            - button "Global" [ref=e68] [cursor=pointer]
+        - generic [ref=e69]:
+          - generic [ref=e70]: Mood
+          - generic [ref=e71]:
+            - button "Light" [ref=e72] [cursor=pointer]
+            - button "Dark" [ref=e73] [cursor=pointer]
+        - generic [ref=e74]:
+          - generic [ref=e75]: Category-aware
+          - generic [ref=e76]: Day workspace
+      - generic [ref=e77]:
+        - generic [ref=e79]:
+          - paragraph [ref=e80]: Workspace brief
+          - heading "Текущий контекст поиска" [level=3] [ref=e81]
+        - generic [ref=e82]:
+          - article [ref=e83]:
+            - generic [ref=e84]: Source
+            - strong [ref=e85]: Local collection
+            - paragraph [ref=e86]: Локальный режим использует встроенную учебную коллекцию.
+          - article [ref=e87]:
+            - generic [ref=e88]: Current scope
+            - strong [ref=e89]: All topics
+            - paragraph [ref=e90]: Категория влияет на локальную выдачу даже без текстового запроса.
+      - generic [ref=e91]:
+        - generic [ref=e93]:
+          - paragraph [ref=e94]: History shelf
+          - heading "Недавние запросы" [level=3] [ref=e95]
+        - paragraph [ref=e96]: История появится после первого успешного поиска и останется между сессиями.

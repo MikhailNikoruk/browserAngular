@@ -188,3 +188,124 @@ app-browser-search .status-block--idle {
     transform: rotate(360deg);
   }
 }
+
+app-browser-search .browser-search__brand-block,
+app-browser-search .browser-search__snapshot-card {
+  padding: 1.3rem 1.35rem;
+  border: 1px solid var(--panel-border);
+  border-radius: 1.6rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.22), transparent 100%),
+    var(--panel-bg);
+  box-shadow: var(--surface-shadow);
+}
+
+app-browser-search .browser-search__brand-block {
+  display: grid;
+  gap: 0.9rem;
+}
+
+app-browser-search .browser-search__brand-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+app-browser-search .browser-search__product-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.85rem, 3vw, 2.8rem);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+}
+
+app-browser-search .browser-search__product-summary {
+  max-width: 56rem;
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.97rem;
+  line-height: 1.65;
+}
+
+app-browser-search .browser-search__snapshot-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+app-browser-search .browser-search__snapshot-card,
+app-browser-search .browser-search__brief-card {
+  display: grid;
+  gap: 0.35rem;
+}
+
+app-browser-search .browser-search__snapshot-label,
+app-browser-search .browser-search__brief-label {
+  margin: 0;
+  color: var(--muted-text);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+app-browser-search .browser-search__snapshot-value,
+app-browser-search .browser-search__brief-value {
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+app-browser-search .browser-search__snapshot-note,
+app-browser-search .browser-search__brief-copy {
+  margin: 0;
+  color: var(--muted-text);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+app-browser-search .browser-search__brief-grid {
+  display: grid;
+  gap: 0.9rem;
+  margin-top: 1rem;
+}
+
+app-browser-search .browser-search__brief-card {
+  padding: 1rem 1.05rem;
+  border: 1px solid var(--card-border);
+  border-radius: 1.25rem;
+  background: var(--card-bg);
+}
+
+@media (max-width: 980px) {
+  app-browser-search .browser-search__snapshot-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 840px) {
+  app-browser-search .browser-search__snapshot-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  app-browser-search .browser-search__brand-block,
+  app-browser-search .browser-search__snapshot-card,
+  app-browser-search .browser-search__brief-card {
+    padding: 1rem;
+    border-radius: 1.4rem;
+  }
+
+  app-browser-search .browser-search__brand-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  app-browser-search .browser-search__snapshot-grid {
+    grid-template-columns: 1fr;
+  }
+}
