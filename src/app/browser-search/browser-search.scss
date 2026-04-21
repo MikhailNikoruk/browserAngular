@@ -244,6 +244,13 @@
   text-transform: uppercase;
 }
 
+.control-group__caption {
+  margin: -0.15rem 0 0;
+  color: var(--muted-text);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
 .segmented-control {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

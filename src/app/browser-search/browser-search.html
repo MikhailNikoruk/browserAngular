@@ -100,13 +100,13 @@
                     <div class="browser-search__panel-header">
                         <div>
                             <p class="browser-search__panel-kicker">Search builder</p>
-                            <h3>Соберите запрос и переключайтесь между локальной базой и внешним каталогом.</h3>
+                            <h3>Соберите запрос и запустите поиск из главной рабочей панели.</h3>
                         </div>
                         <p class="browser-search__panel-caption">
                             {{
                                 currentSearchMode === SearchMode.Global
-                                    ? 'В глобальном режиме категория сохраняется как локальный контекст.'
-                                    : 'Локальный режим поддерживает поиск по категории даже без текстового запроса.'
+                                    ? 'Сначала выберите источник справа, затем задайте текстовый запрос для внешнего каталога.'
+                                    : 'Локальный режим остаётся самым гибким: можно искать по тексту, по категории или комбинировать оба сигнала.'
                             }}
                         </p>
                     </div>
@@ -155,12 +155,26 @@
                         <p class="status-block__eyebrow">Searching</p>
                         <h3>Подбираю материалы{{ currentSearchMode === SearchMode.Global ? ' в Google Books' : '' }}</h3>
                         <p>Готовлю новую подборку результатов и очищаю устаревшие ответы.</p>
+                        <div class="status-block__tips">
+                            <span class="status-tip">
+                                {{
+                                    currentSearchMode === SearchMode.Global
+                                        ? 'External request in progress'
+                                        : 'Local collection is being filtered'
+                                }}
+                            </span>
+                            <span class="status-tip">Новая выдача заменит предыдущую подборку после ответа</span>
+                        </div>
                     </div>
                 } @else if (requestStatus === 'error') {
                     <div class="status-block status-block--error">
                         <p class="status-block__eyebrow">Connection issue</p>
                         <h3>Не получилось получить внешние результаты</h3>
                         <p>{{ errorMessage || 'Во время поиска произошла ошибка.' }}</p>
+                        <div class="status-block__tips">
+                            <span class="status-tip">Проверьте запрос или попробуйте снова через несколько секунд</span>
+                            <span class="status-tip">Можно вернуться в Local mode и продолжить без внешнего API</span>
+                        </div>
                     </div>
                 } @else if (requestStatus === 'empty') {
                     <div class="status-block">
@@ -173,6 +187,12 @@
                                     : 'Ничего не найдено. Попробуйте другой запрос или категорию.'
                             }}
                         </p>
+                        <div class="status-block__tips">
+                            <span class="status-tip">Сделайте запрос короче или используйте другой термин</span>
+                            <span class="status-tip">
+                                {{ currentSearchMode === SearchMode.Global ? 'Попробуйте Local mode для учебной коллекции' : 'Попробуйте другую категорию справа в форме' }}
+                            </span>
+                        </div>
                     </div>
                 } @else {
                     <div class="status-block status-block--idle">
@@ -191,6 +211,10 @@
                                     : 'Локальная коллекция хорошо работает как по полному запросу, так и по тематическому фильтру.'
                             }}
                         </p>
+                        <div class="status-block__tips">
+                            <span class="status-tip">Шаг 1: выберите источник поиска в правой колонке</span>
+                            <span class="status-tip">Шаг 2: введите запрос или используйте категорию как фильтр</span>
+                        </div>
                     </div>
                 }
             </div>
@@ -199,6 +223,9 @@
                 <section class="browser-search__control-rail">
                     <div class="control-group">
                         <span class="control-group__label">Search mode</span>
+                        <p class="control-group__caption">
+                            Основной контекст поиска. Он определяет, откуда брать данные и какие поля обязательны.
+                        </p>
 
                         <div class="segmented-control">
                             <button
@@ -222,7 +249,10 @@
                     </div>
 
                     <div class="control-group">
-                        <span class="control-group__label">Mood</span>
+                        <span class="control-group__label">Theme</span>
+                        <p class="control-group__caption">
+                            Визуальное предпочтение. Не влияет на выдачу, но меняет режим чтения интерфейса.
+                        </p>
 
                         <div class="segmented-control">
                             <button

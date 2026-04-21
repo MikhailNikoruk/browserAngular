@@ -146,6 +146,27 @@ app-browser-search .status-block p {
   line-height: 1.7;
 }
 
+app-browser-search .status-block__tips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+app-browser-search .status-tip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.25rem;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid var(--panel-border);
+  border-radius: 999px;
+  background: var(--button-subtle);
+  color: var(--text-secondary);
+  font-size: 0.84rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
 app-browser-search .status-block__eyebrow {
   margin: 0;
   color: var(--accent);
@@ -303,6 +324,10 @@ app-browser-search .browser-search__brief-card {
   app-browser-search .browser-search__brand-row {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  app-browser-search .status-block__tips {
+    flex-direction: column;
   }
 
   app-browser-search .browser-search__snapshot-grid {

@@ -1,48 +1,86 @@
 <form class="search-form" [formGroup]="searchForm" (ngSubmit)="submitForm()">
-    <label class="search-form__field">
-        <span class="search-form__label">Запрос</span>
+    <div class="search-form__intro">
+        <div>
+            <p class="search-form__kicker">Primary action</p>
+            <h4 class="search-form__title">
+                {{
+                    categoryDisabled
+                        ? 'Сформулируйте текстовый запрос для внешнего каталога.'
+                        : 'Начните с запроса или сузьте выдачу тематической категорией.'
+                }}
+            </h4>
+        </div>
 
-        <input
-            class="search-field"
-            formControlName="query"
-            type="text"
-            placeholder="Введите запрос"
-            inputmode="search"
-            autocomplete="off"
-        >
+        <p class="search-form__summary">
+            {{
+                categoryDisabled
+                    ? 'Глобальный режим требует текстовый запрос и использует категорию только как локальный ориентир.'
+                    : 'Локальный режим работает как с полным запросом, так и с одной только категорией.'
+            }}
+        </p>
+    </div>
 
-        <span class="search-form__hint">
-            Пробуйте точный термин, фамилию автора или тематический фрагмент.
-        </span>
-    </label>
+    <div class="search-form__layout">
+        <label class="search-form__field search-form__field--query">
+            <span class="search-form__label">Запрос</span>
 
-    <label class="search-form__field search-form__field--compact">
-        <span class="search-form__label">Категория</span>
+            <input
+                class="search-field"
+                formControlName="query"
+                type="text"
+                placeholder="Введите запрос"
+                inputmode="search"
+                autocomplete="off"
+            >
 
-        <select class="search-select" formControlName="category">
-            @for (category of categories; track category) {
-                <option [value]="category">
-                    {{ getCategoryLabel(category) }}
-                </option>
-            }
-        </select>
-
-        @if (categoryDisabled) {
             <span class="search-form__hint">
-                В глобальном режиме категория сохраняется, но не участвует в поиске.
+                Пробуйте точный термин, фамилию автора или тематический фрагмент.
             </span>
-        }
-    </label>
+        </label>
 
-    <div class="search-form__actions">
-        @if (queryValue || categoryValue !== 'all') {
-            <button class="form-button form-button--secondary" type="button" [disabled]="isLoading" (click)="resetForm()">
-                Очистить
+        <label class="search-form__field search-form__field--compact">
+            <span class="search-form__label">Категория</span>
+
+            <select class="search-select" formControlName="category">
+                @for (category of categories; track category) {
+                    <option [value]="category">
+                        {{ getCategoryLabel(category) }}
+                    </option>
+                }
+            </select>
+
+            @if (categoryDisabled) {
+                <span class="search-form__hint">
+                    В глобальном режиме категория сохраняется, но не участвует в поиске.
+                </span>
+            } @else {
+                <span class="search-form__hint">
+                    Категория может выступать самостоятельным фильтром без текстового запроса.
+                </span>
+            }
+        </label>
+    </div>
+
+    <div class="search-form__footer">
+        <div class="search-form__signals">
+            <span class="search-form__signal">
+                {{ categoryDisabled ? 'Query required' : 'Category can drive search' }}
+            </span>
+            <span class="search-form__signal">
+                {{ queryValue ? 'Query ready' : 'Awaiting input' }}
+            </span>
+        </div>
+
+        <div class="search-form__actions">
+            @if (queryValue || categoryValue !== 'all') {
+                <button class="form-button form-button--secondary" type="button" [disabled]="isLoading" (click)="resetForm()">
+                    Очистить
+                </button>
+            }
+
+            <button class="form-button" type="submit" [disabled]="!canSubmit || isLoading">
+                {{ isLoading ? 'Собираю подборку...' : 'Найти материалы' }}
             </button>
-        }
-
-        <button class="form-button" type="submit" [disabled]="!canSubmit || isLoading">
-            {{ isLoading ? 'Собираю подборку...' : 'Найти материалы' }}
-        </button>
+        </div>
     </div>
 </form>
