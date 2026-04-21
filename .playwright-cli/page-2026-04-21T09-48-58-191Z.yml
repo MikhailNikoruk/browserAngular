@@ -1,0 +1,114 @@
+- generic [ref=e5]:
+  - banner [ref=e6]:
+    - generic [ref=e7]:
+      - paragraph [ref=e8]: Browser Search Workspace
+      - generic [ref=e9]:
+        - heading "Search OS" [level=1] [ref=e10]
+        - generic [ref=e11]: Local mode
+      - paragraph [ref=e12]: "Рабочее пространство для учебного поиска: один экран для локальной коллекции, внешнего каталога, сохранённой истории и быстрых переключателей режима."
+    - generic [ref=e13]:
+      - article [ref=e14]:
+        - paragraph [ref=e15]: Scope
+        - strong [ref=e16]: All topics
+        - generic [ref=e17]: Текущий фильтр каталога
+      - article [ref=e18]:
+        - paragraph [ref=e19]: History
+        - strong [ref=e20]: "0"
+        - generic [ref=e21]: Сохранённых запросов
+      - article [ref=e22]:
+        - paragraph [ref=e23]: Results
+        - strong [ref=e24]: "0"
+        - generic [ref=e25]: Пока без выдачи
+      - article [ref=e26]:
+        - paragraph [ref=e27]: Theme
+        - strong [ref=e28]: Light
+        - generic [ref=e29]: Активная визуальная тема
+  - generic [ref=e30]:
+    - generic [ref=e31]:
+      - generic [ref=e33]:
+        - paragraph [ref=e34]: Search desk
+        - heading "Браузерный поиск для учебных материалов и книг" [level=2] [ref=e35]
+        - paragraph [ref=e36]: Собирайте запросы, меняйте источник поиска и отслеживайте состояние выдачи в одном рабочем пространстве без переключения между экранами.
+        - generic [ref=e37]:
+          - generic [ref=e38]: Local index
+          - generic [ref=e39]: Workspace idle
+          - generic [ref=e40]: Local collection
+      - generic [ref=e41]:
+        - generic [ref=e42]:
+          - generic [ref=e43]:
+            - paragraph [ref=e44]: Search builder
+            - heading "Соберите запрос и запустите поиск из главной рабочей панели." [level=3] [ref=e45]
+          - paragraph [ref=e46]: "Локальный режим остаётся самым гибким: можно искать по тексту, по категории или комбинировать оба сигнала."
+        - generic [ref=e48]:
+          - generic [ref=e49]:
+            - generic [ref=e50]:
+              - paragraph [ref=e51]: Primary action
+              - heading "Начните с запроса или сузьте выдачу тематической категорией." [level=4] [ref=e52]
+            - paragraph [ref=e53]: Локальный режим работает как с полным запросом, так и с одной только категорией.
+          - generic [ref=e54]:
+            - generic [ref=e55]:
+              - generic [ref=e56]: Запрос
+              - textbox "Запрос Пробуйте точный термин, фамилию автора или тематический фрагмент." [ref=e57]:
+                - /placeholder: Введите запрос
+              - generic [ref=e58]: Пробуйте точный термин, фамилию автора или тематический фрагмент.
+            - generic [ref=e59]:
+              - generic [ref=e60]: Категория
+              - combobox "Категория Категория может выступать самостоятельным фильтром без текстового запроса." [ref=e61]:
+                - option "Все темы"
+                - option "Frontend"
+                - option "JavaScript"
+                - option "CSS"
+                - option "Performance"
+                - option "Architecture"
+                - option "Testing" [selected]
+                - option "Browser"
+              - generic [ref=e62]: Категория может выступать самостоятельным фильтром без текстового запроса.
+          - generic [ref=e63]:
+            - generic [ref=e64]:
+              - generic [ref=e65]: Category can drive search
+              - generic [ref=e66]: Awaiting input
+            - generic [ref=e67]:
+              - button "Очистить" [ref=e113] [cursor=pointer]
+              - button "Найти материалы" [ref=e68] [cursor=pointer]
+      - generic [ref=e69]:
+        - paragraph [ref=e70]: Ready
+        - heading "Начните с текста запроса или выберите тематическую категорию." [level=3] [ref=e71]
+        - paragraph [ref=e72]: Локальная коллекция хорошо работает как по полному запросу, так и по тематическому фильтру.
+        - generic [ref=e73]:
+          - generic [ref=e74]: "Шаг 1: выберите источник поиска в правой колонке"
+          - generic [ref=e75]: "Шаг 2: введите запрос или используйте категорию как фильтр"
+    - complementary [ref=e76]:
+      - generic [ref=e77]:
+        - generic [ref=e78]:
+          - generic [ref=e79]: Search mode
+          - paragraph [ref=e80]: Основной контекст поиска. Он определяет, откуда брать данные и какие поля обязательны.
+          - generic [ref=e81]:
+            - button "Local" [ref=e82] [cursor=pointer]
+            - button "Global" [ref=e83] [cursor=pointer]
+        - generic [ref=e84]:
+          - generic [ref=e85]: Theme
+          - paragraph [ref=e86]: Визуальное предпочтение. Не влияет на выдачу, но меняет режим чтения интерфейса.
+          - generic [ref=e87]:
+            - button "Light" [ref=e88] [cursor=pointer]
+            - button "Dark" [ref=e89] [cursor=pointer]
+        - generic [ref=e90]:
+          - generic [ref=e91]: Category-aware
+          - generic [ref=e92]: Day workspace
+      - generic [ref=e93]:
+        - generic [ref=e95]:
+          - paragraph [ref=e96]: Workspace brief
+          - heading "Текущий контекст поиска" [level=3] [ref=e97]
+        - generic [ref=e98]:
+          - article [ref=e99]:
+            - generic [ref=e100]: Source
+            - strong [ref=e101]: Local collection
+            - paragraph [ref=e102]: Локальный режим использует встроенную учебную коллекцию.
+          - article [ref=e103]:
+            - generic [ref=e104]: Current scope
+            - strong [ref=e105]: All topics
+            - paragraph [ref=e106]: Категория влияет на локальную выдачу даже без текстового запроса.
+      - generic [ref=e107]:
+        - generic [ref=e109]:
+          - paragraph [ref=e110]: History shelf
+          - heading "Недавние запросы" [level=3] [ref=e111]
+        - paragraph [ref=e112]: История появится после первого успешного поиска и останется между сессиями.

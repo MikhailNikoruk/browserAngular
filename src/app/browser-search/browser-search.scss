@@ -337,6 +337,10 @@
   .browser-search__title {
     max-width: none;
   }
+
+  .browser-search__subtitle {
+    max-width: none;
+  }
 }
 
 @media (max-width: 640px) {
@@ -347,6 +351,17 @@
   .browser-search__shell {
     padding: 1rem;
     border-radius: 1.6rem;
+  }
+
+  .browser-search__title {
+    font-size: clamp(2.2rem, 14vw, 3.3rem);
+    line-height: 0.96;
+  }
+
+  .browser-search__subtitle,
+  .browser-search__panel-caption,
+  .control-group__caption {
+    font-size: 0.92rem;
   }
 
   .browser-search__panel,

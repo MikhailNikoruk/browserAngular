@@ -1,42 +1,95 @@
-<div class="data-list">
-    @for (dataItem of dataList(); track dataItem.id || $index) {
-        <article class="data-item">
-            <div class="data-item__header">
-                <div class="data-item__position">0{{ $index + 1 }}</div>
+@if (featuredItem(); as featuredItem) {
+    <section class="results-showcase">
+        <article class="data-item data-item--featured">
+            <div class="data-item__featured-rail">
+                <div class="data-item__position">01</div>
+                <span class="data-item__spotlight">Featured</span>
+            </div>
 
+            <div class="data-item__body">
                 <div class="data-item__heading">
-                    <span class="data-item__overline">Search result</span>
-                    <h4 class="data-item__title">
-                        {{ dataItem.title }}
+                    <span class="data-item__overline">{{ getResultEyebrow(0, true) }}</span>
+                    <h4 class="data-item__title data-item__title--featured">
+                        {{ featuredItem.title }}
                     </h4>
                 </div>
-            </div>
 
-            <div class="data-item__meta">
-                <div class="data-item__category">
-                    {{ dataItem.category }}
+                <div class="data-item__meta">
+                    <div class="data-item__category">
+                        {{ featuredItem.category }}
+                    </div>
+                    <span class="data-item__source">
+                        {{ featuredItem.link ? getLinkLabel(featuredItem.link) : 'Local-only material' }}
+                    </span>
+                    <span class="data-item__tag">Best place to start</span>
                 </div>
 
-                <span class="data-item__source">
-                    {{ dataItem.link ? getLinkLabel(dataItem.link) : 'No external source' }}
-                </span>
-            </div>
+                <p class="data-item__text data-item__text--featured">
+                    {{ getResultSummary(featuredItem, true) }}
+                </p>
 
-            <div class="data-item__text">
-                @if (dataItem.text) {
-                    {{ dataItem.text }}
-                } @else {
-                    Краткое описание отсутствует, но материал можно открыть по ссылке ниже.
+                <div class="data-item__footer">
+                    @if (featuredItem.link) {
+                        <a class="data-item__link data-item__link--featured" [href]="featuredItem.link" target="_blank" rel="noreferrer">
+                            {{ getResultActionLabel(featuredItem, true) }}
+                        </a>
+                    } @else {
+                        <span class="data-item__link data-item__link--muted">{{ getResultActionLabel(featuredItem, true) }}</span>
+                    }
+
+                    <div class="data-item__utility">
+                        <span class="data-item__utility-label">Result 1 of {{ dataList().length }}</span>
+                        <span class="data-item__utility-label">
+                            {{ featuredItem.link ? 'External reference available' : 'Preview only' }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        @if (secondaryItems().length) {
+            <div class="data-grid">
+                @for (dataItem of secondaryItems(); track dataItem.id || $index) {
+                    <article class="data-item">
+                        <div class="data-item__header">
+                            <div class="data-item__position">{{ $index + 2 < 10 ? '0' : '' }}{{ $index + 2 }}</div>
+
+                            <div class="data-item__heading">
+                                <span class="data-item__overline">{{ getResultEyebrow($index + 1) }}</span>
+                                <h4 class="data-item__title">
+                                    {{ dataItem.title }}
+                                </h4>
+                            </div>
+                        </div>
+
+                        <div class="data-item__meta">
+                            <div class="data-item__category">
+                                {{ dataItem.category }}
+                            </div>
+
+                            <span class="data-item__source">
+                                {{ dataItem.link ? getLinkLabel(dataItem.link) : 'Local-only material' }}
+                            </span>
+                        </div>
+
+                        <p class="data-item__text">
+                            {{ getResultSummary(dataItem) }}
+                        </p>
+
+                        <div class="data-item__footer">
+                            @if (dataItem.link) {
+                                <a class="data-item__link" [href]="dataItem.link" target="_blank" rel="noreferrer">
+                                    {{ getResultActionLabel(dataItem) }}
+                                </a>
+                            } @else {
+                                <span class="data-item__link data-item__link--muted">{{ getResultActionLabel(dataItem) }}</span>
+                            }
+
+                            <span class="data-item__utility-label">Result {{ $index + 2 }}</span>
+                        </div>
+                    </article>
                 }
             </div>
-
-            @if (dataItem.link) {
-                <a class="data-item__link" [href]="dataItem.link" target="_blank" rel="noreferrer">
-                    Открыть источник
-                </a>
-            } @else {
-                <span class="data-item__link data-item__link--muted">Ссылка недоступна</span>
-            }
-        </article>
-    }
-</div>
+        }
+    </section>
+}
