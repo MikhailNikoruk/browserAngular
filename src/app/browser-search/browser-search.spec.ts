@@ -34,9 +34,10 @@ describe('BrowserSearch', () => {
   });
 
   it('shows idle state before the first search', () => {
-    expect(fixture.nativeElement.textContent).toContain(
-      'Начните с текста запроса или выберите тематическую категорию.',
-    );
+    const idleState = fixture.nativeElement.querySelector('.status-block--idle') as HTMLElement;
+
+    expect(idleState).not.toBeNull();
+    expect(idleState.textContent).toContain('Начните с текста запроса');
   });
 
   it('runs local search by category and resets back to idle state', async () => {
@@ -54,19 +55,16 @@ describe('BrowserSearch', () => {
 
     expect(fixture.nativeElement.querySelectorAll('.data-item').length).toBeGreaterThan(0);
 
-    const buttons = Array.from(
-      fixture.nativeElement.querySelectorAll('button'),
-    ) as HTMLButtonElement[];
-    const resetButton = buttons.find((button) => button.textContent?.includes('Очистить')) as HTMLButtonElement;
+    const resetButton = fixture.nativeElement.querySelector(
+      'button[aria-label="Сбросить форму поиска"]',
+    ) as HTMLButtonElement;
 
     resetButton.click();
     fixture.detectChanges();
     await fixture.whenStable();
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.textContent).toContain(
-      'Начните с текста запроса или выберите тематическую категорию.',
-    );
+    expect(fixture.nativeElement.querySelector('.status-block--idle')).not.toBeNull();
   });
 
   it('restores query from history click', async () => {
@@ -82,10 +80,9 @@ describe('BrowserSearch', () => {
     await fixture.whenStable();
     fixture.detectChanges();
 
-    const buttons = Array.from(
-      fixture.nativeElement.querySelectorAll('button'),
-    ) as HTMLButtonElement[];
-    const resetButton = buttons.find((button) => button.textContent?.includes('Очистить')) as HTMLButtonElement;
+    const resetButton = fixture.nativeElement.querySelector(
+      'button[aria-label="Сбросить форму поиска"]',
+    ) as HTMLButtonElement;
 
     resetButton.click();
     fixture.detectChanges();
@@ -104,8 +101,9 @@ describe('BrowserSearch', () => {
   });
 
   it('switches theme from UI controls', async () => {
-    const buttons = Array.from(fixture.nativeElement.querySelectorAll('.pill-button')) as HTMLButtonElement[];
-    const darkThemeButton = buttons.find((button) => button.textContent?.includes('Dark')) as HTMLButtonElement;
+    const darkThemeButton = fixture.nativeElement.querySelector(
+      'button[aria-label="Тёмная тема"]',
+    ) as HTMLButtonElement;
 
     darkThemeButton.click();
     fixture.detectChanges();
@@ -123,8 +121,9 @@ describe('BrowserSearch', () => {
 
     googleApi.searchDataByText.mockReturnValue(pendingRequest$.asObservable());
 
-    const modeButtons = Array.from(fixture.nativeElement.querySelectorAll('.pill-button')) as HTMLButtonElement[];
-    const globalModeButton = modeButtons.find((button) => button.textContent?.includes('Global')) as HTMLButtonElement;
+    const globalModeButton = fixture.nativeElement.querySelector(
+      'button[aria-label="Внешний поиск"]',
+    ) as HTMLButtonElement;
     const queryInput = fixture.nativeElement.querySelector(
       'input[formcontrolname="query"]',
     ) as HTMLInputElement;

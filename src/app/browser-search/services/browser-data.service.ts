@@ -107,7 +107,7 @@ export class BrowserDataService {
 
     return {
       id: item.id ?? '',
-      title: volumeInfo.title ?? 'Untitled',
+      title: volumeInfo.title ?? 'Без названия',
       text: this.getPreviewText(description),
       link: volumeInfo.infoLink ?? volumeInfo.canonicalVolumeLink ?? item.selfLink ?? '',
       category: 'all',

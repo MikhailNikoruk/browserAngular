@@ -1,4 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+
+import { SEARCH_CATEGORY_LABELS } from '../../consts';
 import { SearchDataItem } from '../../types';
 
 @Component({
@@ -9,6 +11,7 @@ import { SearchDataItem } from '../../types';
   styleUrl: './browser-search-data.scss',
 })
 export class BrowserSearchData {
+  private readonly categoryLabels = SEARCH_CATEGORY_LABELS;
   dataList = input<SearchDataItem[]>([]);
   protected readonly featuredItem = computed(() => this.dataList()[0] ?? null);
   protected readonly secondaryItems = computed(() => this.dataList().slice(1));
@@ -25,10 +28,10 @@ export class BrowserSearchData {
 
   protected getResultEyebrow(index: number, featured = false): string {
     if (featured) {
-      return 'Lead result';
+      return 'Главный результат';
     }
 
-    return index < 3 ? 'Strong match' : 'Result item';
+    return index < 3 ? 'Сильное совпадение' : 'Найденный материал';
   }
 
   protected getResultSummary(dataItem: SearchDataItem, featured = false): string {
@@ -45,9 +48,13 @@ export class BrowserSearchData {
 
   protected getResultActionLabel(dataItem: SearchDataItem, featured = false): string {
     if (!dataItem.link) {
-      return featured ? 'Источник недоступен' : 'Ссылка недоступна';
+      return featured ? 'Ссылка недоступна' : 'Ссылка недоступна';
     }
 
     return featured ? 'Открыть главный материал' : 'Открыть источник';
+  }
+
+  protected getCategoryLabel(category: SearchDataItem['category']): string {
+    return this.categoryLabels[category] ?? category;
   }
 }

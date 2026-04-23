@@ -1,4 +1,5 @@
-import { Component, inject } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { BrowserSearchForm, BrowserSearchData } from './components';
@@ -11,11 +12,11 @@ import {
   SearchParamsService,
 } from './services';
 import { SearchMode } from './enums';
-import { AsyncPipe } from '@angular/common';
 import { Theme, ThemeService } from '../core';
 
 @Component({
   selector: 'app-browser-search',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './browser-search.html',
   styleUrl: './browser-search.scss',
   imports: [BrowserSearchForm, BrowserSearchData, AsyncPipe],

@@ -3,7 +3,7 @@
         <article class="data-item data-item--featured">
             <div class="data-item__featured-rail">
                 <div class="data-item__position">01</div>
-                <span class="data-item__spotlight">Featured</span>
+                <span class="data-item__spotlight">Старт</span>
             </div>
 
             <div class="data-item__body">
@@ -16,12 +16,12 @@
 
                 <div class="data-item__meta">
                     <div class="data-item__category">
-                        {{ featuredItem.category }}
+                        {{ getCategoryLabel(featuredItem.category) }}
                     </div>
                     <span class="data-item__source">
-                        {{ featuredItem.link ? getLinkLabel(featuredItem.link) : 'Local-only material' }}
+                        {{ featuredItem.link ? getLinkLabel(featuredItem.link) : 'Без внешней ссылки' }}
                     </span>
-                    <span class="data-item__tag">Best place to start</span>
+                    <span class="data-item__tag">Лучший старт</span>
                 </div>
 
                 <p class="data-item__text data-item__text--featured">
@@ -38,9 +38,9 @@
                     }
 
                     <div class="data-item__utility">
-                        <span class="data-item__utility-label">Result 1 of {{ dataList().length }}</span>
+                        <span class="data-item__utility-label">Материал 1 из {{ dataList().length }}</span>
                         <span class="data-item__utility-label">
-                            {{ featuredItem.link ? 'External reference available' : 'Preview only' }}
+                            {{ featuredItem.link ? 'Есть внешняя ссылка' : 'Только предпросмотр' }}
                         </span>
                     </div>
                 </div>
@@ -64,11 +64,11 @@
 
                         <div class="data-item__meta">
                             <div class="data-item__category">
-                                {{ dataItem.category }}
+                                {{ getCategoryLabel(dataItem.category) }}
                             </div>
 
                             <span class="data-item__source">
-                                {{ dataItem.link ? getLinkLabel(dataItem.link) : 'Local-only material' }}
+                                {{ dataItem.link ? getLinkLabel(dataItem.link) : 'Без внешней ссылки' }}
                             </span>
                         </div>
 
@@ -85,7 +85,7 @@
                                 <span class="data-item__link data-item__link--muted">{{ getResultActionLabel(dataItem) }}</span>
                             }
 
-                            <span class="data-item__utility-label">Result {{ $index + 2 }}</span>
+                            <span class="data-item__utility-label">Материал {{ $index + 2 }}</span>
                         </div>
                     </article>
                 }

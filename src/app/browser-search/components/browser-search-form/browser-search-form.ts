@@ -1,6 +1,15 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
+import { SEARCH_CATEGORY_LABELS } from '../../consts';
 import { SearchCategory, SearchParams } from '../../types';
 import { DEFAULT_SEARCH_PARAMS } from '../../services';
 
@@ -12,6 +21,7 @@ interface SearchFormControls {
 @Component({
   selector: 'app-browser-search-form',
   imports: [ReactiveFormsModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './browser-search-form.html',
   styleUrl: './browser-search-form.scss',
 })
@@ -20,16 +30,7 @@ export class BrowserSearchForm implements OnChanges {
   @Input() categoryDisabled = false;
   @Input() isLoading = false;
   @Input() categories: SearchCategory[] = [];
-  @Input() categoryLabels: Record<SearchCategory, string> = {
-    all: 'Все темы',
-    frontend: 'Frontend',
-    javascript: 'JavaScript',
-    css: 'CSS',
-    performance: 'Performance',
-    architecture: 'Architecture',
-    testing: 'Testing',
-    browser: 'Browser',
-  };
+  @Input() categoryLabels: Record<SearchCategory, string> = SEARCH_CATEGORY_LABELS;
 
   @Output() submitEvent = new EventEmitter<SearchParams>();
   @Output() resetEvent = new EventEmitter<void>();

@@ -1,7 +1,7 @@
-<form class="search-form" [formGroup]="searchForm" (ngSubmit)="submitForm()">
+<form class="search-form" [formGroup]="searchForm" (ngSubmit)="submitForm()" aria-label="Форма поиска материалов">
     <div class="search-form__intro">
         <div>
-            <p class="search-form__kicker">Primary action</p>
+            <p class="search-form__kicker">Главное действие</p>
             <h4 class="search-form__title">
                 {{
                     categoryDisabled
@@ -64,16 +64,22 @@
     <div class="search-form__footer">
         <div class="search-form__signals">
             <span class="search-form__signal">
-                {{ categoryDisabled ? 'Query required' : 'Category can drive search' }}
+                {{ categoryDisabled ? 'Нужен текст запроса' : 'Категория может быть фильтром' }}
             </span>
             <span class="search-form__signal">
-                {{ queryValue ? 'Query ready' : 'Awaiting input' }}
+                {{ queryValue ? 'Запрос готов' : 'Жду ввод' }}
             </span>
         </div>
 
         <div class="search-form__actions">
             @if (queryValue || categoryValue !== 'all') {
-                <button class="form-button form-button--secondary" type="button" [disabled]="isLoading" (click)="resetForm()">
+                <button
+                    class="form-button form-button--secondary"
+                    type="button"
+                    aria-label="Сбросить форму поиска"
+                    [disabled]="isLoading"
+                    (click)="resetForm()"
+                >
                     Очистить
                 </button>
             }

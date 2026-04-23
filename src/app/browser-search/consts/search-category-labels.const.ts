@@ -2,11 +2,11 @@ import { SearchCategory } from '../types';
 
 export const SEARCH_CATEGORY_LABELS: Record<SearchCategory, string> = {
   all: 'Все темы',
-  frontend: 'Frontend',
+  frontend: 'Фронтенд',
   javascript: 'JavaScript',
   css: 'CSS',
-  performance: 'Performance',
-  architecture: 'Architecture',
-  testing: 'Testing',
-  browser: 'Browser',
+  performance: 'Производительность',
+  architecture: 'Архитектура',
+  testing: 'Тестирование',
+  browser: 'Браузер',
 };
